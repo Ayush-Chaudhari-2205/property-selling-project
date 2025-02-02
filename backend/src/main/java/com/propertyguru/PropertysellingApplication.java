@@ -23,10 +23,10 @@ public class PropertysellingApplication {
 		return modelMapper;
 	}
 	//configure PasswordEncoder bean 
-	@Bean
-	public PasswordEncoder passwordEncoder()
-	{
-		return new BCryptPasswordEncoder();
-	}
+//	@Bean
+//	public PasswordEncoder passwordEncoder()
+//	{
+//		return new BCryptPasswordEncoder();
+//	}
 
 }

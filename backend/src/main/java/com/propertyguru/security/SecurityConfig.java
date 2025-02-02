@@ -39,7 +39,7 @@ public class SecurityConfig {
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 				.authorizeHttpRequests(authorize -> authorize
-						.requestMatchers("/products/view", "/user/signup", "/users/signin", "/v*/api-doc*/**", "/swagger-ui/**").permitAll()
+						.requestMatchers("/user/signup", "/v*/api-doc*/**", "/swagger-ui/**").permitAll()
 						.requestMatchers(HttpMethod.OPTIONS).permitAll()
 						.requestMatchers("/products/purchase").hasAuthority("ROLE_CUSTOMER")
 						.requestMatchers("/products/add").hasAuthority("ROLE_ADMIN")
