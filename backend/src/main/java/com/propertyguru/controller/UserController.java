@@ -11,7 +11,7 @@ import java.util.Collections;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin("*")
+
 public class UserController {
 
     @Autowired

@@ -17,7 +17,7 @@ public class CustomUserDetails implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// Ensure roles are prefixed with "ROLE_" for Spring Security compatibility
-		String role = "ROLE_" + user.getUserType().toString().toUpperCase();
+		String role = "ROLE_" + user .getUserType().toString().toUpperCase();
 		return Collections.singletonList(new SimpleGrantedAuthority(role));
 	}
 
