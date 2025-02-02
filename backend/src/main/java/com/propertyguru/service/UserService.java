@@ -9,5 +9,5 @@ public interface UserService {
 
 
 
-    public ApiResponse<?> addUser(UserSignupDto dto);
+    public ApiResponse<?> addUser();
 }

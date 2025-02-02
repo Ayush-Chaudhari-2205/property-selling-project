@@ -15,9 +15,8 @@ import lombok.*;
 
 public class UserSignupDto {
 
-
     @NotNull(message = "User type is required")
-    private UserType userType;
+    private UserSignUpRequestUserType userType;
 
     @NotBlank(message = "Full name is required")
     @Size(min = 3, max = 100, message = "Full name must be between 3 and 100 characters")
@@ -35,11 +34,4 @@ public class UserSignupDto {
     @Size(min = 6, message = "Password must be at least 6 characters long")
     private String password;
 
-    private String question;
-
-    private String answer;
-
-    private AadhaarCardDTO aadhaarCard;
-
-    private AddressDTO address;
 }
