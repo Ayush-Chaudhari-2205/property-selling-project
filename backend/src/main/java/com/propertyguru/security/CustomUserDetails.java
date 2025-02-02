@@ -1,16 +1,14 @@
 package com.propertyguru.security;
 
 import java.util.Collection;
-import java.util.List;
-
+import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import com.propertyguru.entity.User;
 
 public class CustomUserDetails implements UserDetails {
-	private User user;
+	private final User user;
 
 	public CustomUserDetails(User user) {
 		this.user = user;
@@ -18,45 +16,38 @@ public class CustomUserDetails implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// class : SimpleGrantedAuthority --> GrantedAuthority
-		return List.of(new 
-				SimpleGrantedAuthority(user.getUserType().toString()));
+		// Ensure roles are prefixed with "ROLE_" for Spring Security compatibility
+		String role = "ROLE_" + user.getUserType().toString().toUpperCase();
+		return Collections.singletonList(new SimpleGrantedAuthority(role));
 	}
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
 		return user.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
 		return user.getEmail();
 	}
 
 	@Override
 	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
+		return true; // Change if user expiration logic is implemented
 	}
 
 	@Override
 	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return true;
+		return true; // Implement if user locking is needed
 	}
 
 	@Override
 	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		// TODO Auto-generated method stub
 		return true;
 	}
-
 }

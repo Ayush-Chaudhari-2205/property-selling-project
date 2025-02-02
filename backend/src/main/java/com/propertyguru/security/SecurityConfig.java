@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @EnableWebSecurity
 @Configuration
-@EnableMethodSecurity(prePostEnabled = true) // Use this instead of @EnableGlobalMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true) // Modern alternative to EnableGlobalMethodSecurity
 public class SecurityConfig {
 
 	private final JwtAuthenticationFilter jwtFilter;
@@ -29,19 +29,20 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.cors()
-				.and()
+		http
+				.cors().and()
 				.csrf().disable()
-				.exceptionHandling().authenticationEntryPoint(authEntry)
+				.exceptionHandling()
+				.authenticationEntryPoint(authEntry)
 				.and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+				.sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 				.authorizeHttpRequests(authorize -> authorize
-						.requestMatchers("/products/view", "/user/signup", "/users/signin",
-								"/v*/api-doc*/**", "/swagger-ui/**").permitAll()
+						.requestMatchers("/products/view", "/user/signup", "/users/signin", "/v*/api-doc*/**", "/swagger-ui/**").permitAll()
 						.requestMatchers(HttpMethod.OPTIONS).permitAll()
-						.requestMatchers("/products/purchase").hasRole("CUSTOMER")
-						.requestMatchers("/products/add").hasRole("ADMIN")
+						.requestMatchers("/products/purchase").hasAuthority("ROLE_CUSTOMER")
+						.requestMatchers("/products/add").hasAuthority("ROLE_ADMIN")
 						.anyRequest().authenticated()
 				)
 				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -56,6 +57,6 @@ public class SecurityConfig {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder(); // Ensure password encryption
+		return new BCryptPasswordEncoder(); // Ensures passwords are securely hashed
 	}
 }
