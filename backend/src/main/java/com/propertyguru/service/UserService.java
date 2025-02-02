@@ -7,7 +7,5 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public interface UserService {
 
-
-
     public ApiResponse<?> addUser();
 }
