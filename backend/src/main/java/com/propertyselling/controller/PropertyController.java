@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/property")
-public class PropertyController {
+public class    PropertyController {
 
     @Autowired
     private PropertyService propertyService;
