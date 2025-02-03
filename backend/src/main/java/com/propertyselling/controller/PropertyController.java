@@ -1,6 +1,7 @@
 package com.propertyselling.controller;
 
 import com.propertyselling.dtos.PropertyRequestDTO;
+import com.propertyselling.dtos.PropertyStatusUpdateDTO;
 import com.propertyselling.dtos.PropertyUpdateDTO;
 import com.propertyselling.service.PropertyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,5 +66,10 @@ public class    PropertyController {
     @GetMapping("/filter/furnished")
     public ResponseEntity<?> filterPropertiesByFurnishingStatus(@RequestParam boolean furnished) {
         return ResponseEntity.ok(propertyService.filterPropertiesByFurnishingStatus(furnished));
+    }
+
+    @PutMapping("/status")
+    public ResponseEntity<?> updatePropertyStatus(@RequestBody PropertyStatusUpdateDTO dto) {
+        return ResponseEntity.ok(propertyService.updatePropertyStatus(dto));
     }
 }
