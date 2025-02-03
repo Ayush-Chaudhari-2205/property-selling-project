@@ -23,4 +23,10 @@ public interface PropertyService {
     ApiResponse<List<PropertyResponseDTO>> searchPropertiesByName(String name);
 
     ApiResponse<List<PropertyResponseDTO>> filterPropertiesByType(String propertyType);
+
+    ApiResponse<List<PropertyResponseDTO>> filterPropertiesByPriceRange(Double minPrice, Double maxPrice);
+
+    ApiResponse<List<PropertyResponseDTO>> filterPropertiesByLocation(String city, String state);
+
+    ApiResponse<List<PropertyResponseDTO>> filterPropertiesByFurnishingStatus(boolean furnished);
 }
