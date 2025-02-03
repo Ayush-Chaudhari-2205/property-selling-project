@@ -3,10 +3,7 @@ package com.propertyselling.service;
 import com.propertyselling.Entity.*;
 import com.propertyselling.dao.PropertyEntityDao;
 import com.propertyselling.dao.UserEntityDao;
-import com.propertyselling.dtos.ApiResponse;
-import com.propertyselling.dtos.PropertyRequestDTO;
-import com.propertyselling.dtos.PropertyResponseDTO;
-import com.propertyselling.dtos.PropertyUpdateDTO;
+import com.propertyselling.dtos.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -352,6 +349,25 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
 
+    @Override
+    public ApiResponse<?> updatePropertyStatus(PropertyStatusUpdateDTO dto) {
+        Optional<User> adminOpt = userEntityDao.findById(dto.getAdminId());
+        if (adminOpt.isEmpty() || adminOpt.get().getUserType() != UserType.ADMIN) {
+            return new ApiResponse<>("Unauthorized! Only admins can update property status.", null);
+        }
+
+        Optional<Property> propertyOpt = propertyEntityDao.findById(dto.getPropertyId());
+        if (propertyOpt.isEmpty()) {
+            return new ApiResponse<>("Property not found!", null);
+        }
+
+        Property property = propertyOpt.get();
+        property.setActive(dto.getIsActive());
+        propertyEntityDao.save(property);
+
+        String statusMessage = dto.getIsActive() ? "enabled" : "disabled";
+        return new ApiResponse<>("Property has been " + statusMessage + " successfully!", null);
+    }
 
 
 }

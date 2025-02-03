@@ -1,10 +1,7 @@
 package com.propertyselling.service;
 
 import com.propertyselling.Entity.Property;
-import com.propertyselling.dtos.ApiResponse;
-import com.propertyselling.dtos.PropertyRequestDTO;
-import com.propertyselling.dtos.PropertyResponseDTO;
-import com.propertyselling.dtos.PropertyUpdateDTO;
+import com.propertyselling.dtos.*;
 
 import java.util.List;
 
@@ -29,4 +26,6 @@ public interface PropertyService {
     ApiResponse<List<PropertyResponseDTO>> filterPropertiesByLocation(String city, String state);
 
     ApiResponse<List<PropertyResponseDTO>> filterPropertiesByFurnishingStatus(boolean furnished);
+
+    ApiResponse<?> updatePropertyStatus(PropertyStatusUpdateDTO dto);
 }
