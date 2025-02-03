@@ -257,6 +257,100 @@ public class PropertyServiceImpl implements PropertyService {
         return new ApiResponse<>("Properties filtered successfully!", propertyDTOList);
     }
 
+    @Override
+    public ApiResponse<List<PropertyResponseDTO>> filterPropertiesByPriceRange(Double minPrice, Double maxPrice) {
+        // ✅ Validate the price range
+        if (minPrice == null || maxPrice == null || minPrice < 0 || maxPrice < 0 || minPrice > maxPrice) {
+            return new ApiResponse<>("Invalid price range! Ensure minPrice is less than maxPrice and values are non-negative.", null);
+        }
+
+        List<Property> properties = propertyEntityDao.findByPriceBetweenAndIsActiveTrue(minPrice, maxPrice);
+
+        if (properties.isEmpty()) {
+            return new ApiResponse<>("No properties found within the specified price range!", null);
+        }
+
+        List<PropertyResponseDTO> propertyDTOList = properties.stream()
+                .map(property -> {
+                    PropertyResponseDTO dto = modelMapper.map(property, PropertyResponseDTO.class);
+                    dto.setSellerName(property.getSeller().getFullName());
+                    dto.setSellerEmail(property.getSeller().getEmail());
+
+                    // ✅ Extract image URLs to avoid lazy loading issues
+                    List<String> imageUrls = property.getImages().stream()
+                            .map(PropertyImage::getImageUrl)
+                            .collect(Collectors.toList());
+                    dto.setImageUrls(imageUrls);
+
+                    return dto;
+                }).collect(Collectors.toList());
+
+        return new ApiResponse<>("Properties filtered by price range successfully!", propertyDTOList);
+    }
+
+    @Override
+    public ApiResponse<List<PropertyResponseDTO>> filterPropertiesByLocation(String city, String state) {
+        List<Property> properties;
+
+        if (city != null && state != null) {
+            properties = propertyEntityDao.findByAddress_CityIgnoreCaseAndAddress_StateIgnoreCaseAndIsActiveTrue(city, state);
+        } else if (city != null) {
+            properties = propertyEntityDao.findByAddress_CityIgnoreCaseAndIsActiveTrue(city);
+        } else if (state != null) {
+            properties = propertyEntityDao.findByAddress_StateIgnoreCaseAndIsActiveTrue(state);
+        } else {
+            return new ApiResponse<>("Invalid request! Provide at least a city or state.", null);
+        }
+
+        if (properties.isEmpty()) {
+            return new ApiResponse<>("No properties found for the specified location!", null);
+        }
+
+        List<PropertyResponseDTO> propertyDTOList = properties.stream()
+                .map(property -> {
+                    PropertyResponseDTO dto = modelMapper.map(property, PropertyResponseDTO.class);
+                    dto.setSellerName(property.getSeller().getFullName());
+                    dto.setSellerEmail(property.getSeller().getEmail());
+
+                    // ✅ Extract image URLs to avoid lazy loading issues
+                    List<String> imageUrls = property.getImages().stream()
+                            .map(PropertyImage::getImageUrl)
+                            .collect(Collectors.toList());
+                    dto.setImageUrls(imageUrls);
+
+                    return dto;
+                }).collect(Collectors.toList());
+
+        return new ApiResponse<>("Properties filtered by location successfully!", propertyDTOList);
+    }
+
+    @Override
+    public ApiResponse<List<PropertyResponseDTO>> filterPropertiesByFurnishingStatus(boolean furnished) {
+        List<Property> properties = propertyEntityDao.findByFurnishedAndIsActiveTrue(furnished);
+
+        if (properties.isEmpty()) {
+            String status = furnished ? "furnished" : "unfurnished";
+            return new ApiResponse<>("No " + status + " properties found!", null);
+        }
+
+        List<PropertyResponseDTO> propertyDTOList = properties.stream()
+                .map(property -> {
+                    PropertyResponseDTO dto = modelMapper.map(property, PropertyResponseDTO.class);
+                    dto.setSellerName(property.getSeller().getFullName());
+                    dto.setSellerEmail(property.getSeller().getEmail());
+
+                    // ✅ Extract image URLs to avoid lazy loading issues
+                    List<String> imageUrls = property.getImages().stream()
+                            .map(PropertyImage::getImageUrl)
+                            .collect(Collectors.toList());
+                    dto.setImageUrls(imageUrls);
+
+                    return dto;
+                }).collect(Collectors.toList());
+
+        return new ApiResponse<>("Properties filtered by furnishing status successfully!", propertyDTOList);
+    }
+
 
 
 

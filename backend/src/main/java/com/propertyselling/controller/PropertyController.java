@@ -49,4 +49,21 @@ public class PropertyController {
     public ResponseEntity<?> filterPropertiesByType(@RequestParam String type) {
         return ResponseEntity.ok(propertyService.filterPropertiesByType(type));
     }
+
+    @GetMapping("/filter/price")
+    public ResponseEntity<?> filterPropertiesByPriceRange(@RequestParam Double minPrice, @RequestParam Double maxPrice) {
+        return ResponseEntity.ok(propertyService.filterPropertiesByPriceRange(minPrice, maxPrice));
+    }
+
+    @GetMapping("/filter/location")
+    public ResponseEntity<?> filterPropertiesByLocation(
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String state) {
+        return ResponseEntity.ok(propertyService.filterPropertiesByLocation(city, state));
+    }
+
+    @GetMapping("/filter/furnished")
+    public ResponseEntity<?> filterPropertiesByFurnishingStatus(@RequestParam boolean furnished) {
+        return ResponseEntity.ok(propertyService.filterPropertiesByFurnishingStatus(furnished));
+    }
 }

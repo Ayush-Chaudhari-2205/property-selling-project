@@ -16,4 +16,16 @@ public interface PropertyEntityDao extends JpaRepository<Property,Long  >
     List<Property> findByNameContainingIgnoreCaseAndIsActiveTrue(String name);
 
     List<Property> findByPropertyTypeAndIsActiveTrue(Property_Type propertyType);
+
+    List<Property> findByPriceBetweenAndIsActiveTrue(Double minPrice, Double maxPrice);
+
+    List<Property> findByAddress_CityIgnoreCaseAndAddress_StateIgnoreCaseAndIsActiveTrue(String city, String state);
+
+
+    List<Property> findByAddress_CityIgnoreCaseAndIsActiveTrue(String city);
+
+
+    List<Property> findByAddress_StateIgnoreCaseAndIsActiveTrue(String state);
+
+    List<Property> findByFurnishedAndIsActiveTrue(boolean furnished);
 }
