@@ -32,6 +32,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		if (authHeader != null && authHeader.startsWith("Bearer ")) {
 			// => req header contains JWT
 			String jwt = authHeader.substring(7);
+
+			System.out.println("JWT Received: " + jwt);
+
 			// validate JWT
 			Claims payloadClaims = utils.validateJwtToken(jwt);
 			// get user name from the claims

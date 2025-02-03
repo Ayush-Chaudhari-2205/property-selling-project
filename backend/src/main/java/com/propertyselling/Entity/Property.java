@@ -41,7 +41,7 @@ public class Property extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10, nullable = false)
-    private PropertyType propertyType;
+    private Property_Type propertyType;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
