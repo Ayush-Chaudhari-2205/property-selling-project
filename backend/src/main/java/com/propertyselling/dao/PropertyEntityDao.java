@@ -28,4 +28,7 @@ public interface PropertyEntityDao extends JpaRepository<Property,Long  >
     List<Property> findByAddress_StateIgnoreCaseAndIsActiveTrue(String state);
 
     List<Property> findByFurnishedAndIsActiveTrue(boolean furnished);
+
+    // ✅ Fetch properties owned by a specific seller
+    List<Property> findBySellerId(Long sellerId);
 }

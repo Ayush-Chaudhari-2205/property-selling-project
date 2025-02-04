@@ -2,10 +2,7 @@ package com.propertyselling.controller;
 
 
 import com.propertyselling.Entity.User;
-import com.propertyselling.dtos.SigninRequestDTO;
-import com.propertyselling.dtos.SigninResponseDTO;
-import com.propertyselling.dtos.UserResponseDTO;
-import com.propertyselling.dtos.UserSignupDTO;
+import com.propertyselling.dtos.*;
 import com.propertyselling.security.JwtUtils;
 import com.propertyselling.service.UserService;
 import jakarta.validation.Valid;
@@ -15,11 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -65,5 +60,30 @@ public class UserController {
         return ResponseEntity
                 .ok(new SigninResponseDTO(utils.generateJwtToken(verifiedAuth), verifiedAuth.getName()));
 
+    }
+
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<?> getUserProfile(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.getUserProfile(userId));
+    }
+
+    @PutMapping("/aadhaar")
+    public ResponseEntity<?> addAadhaarCard(@RequestBody AadhaarRequestDTO dto) {
+        return ResponseEntity.ok(userService.addAadhaarCard(dto));
+    }
+
+    @PutMapping("/security-question")
+    public ResponseEntity<?> addSecurityQuestion(@RequestBody SecurityQuestionDTO dto) {
+        return ResponseEntity.ok(userService.addSecurityQuestion(dto));
+    }
+
+    @PutMapping("/address/{userId}")
+    public ResponseEntity<?> addOrUpdateAddress(@PathVariable Long userId, @RequestBody AddressDTO addressDTO) {
+        return ResponseEntity.ok(userService.addOrUpdateAddress(userId, addressDTO));
+    }
+
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<?> updateUserProfile(@PathVariable Long userId, @RequestBody UserUpdateDTO dto) {
+        return ResponseEntity.ok(userService.updateUserProfile(userId, dto));
     }
 }

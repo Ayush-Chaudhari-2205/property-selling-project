@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/property")
 public class    PropertyController {
@@ -71,5 +72,10 @@ public class    PropertyController {
     @PutMapping("/status")
     public ResponseEntity<?> updatePropertyStatus(@RequestBody PropertyStatusUpdateDTO dto) {
         return ResponseEntity.ok(propertyService.updatePropertyStatus(dto));
+    }
+
+    @GetMapping("/seller/{sellerId}")
+    public ResponseEntity<?> getPropertiesBySeller(@PathVariable Long sellerId) {
+        return ResponseEntity.ok(propertyService.getPropertiesBySeller(sellerId));
     }
 }
