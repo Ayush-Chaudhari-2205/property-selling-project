@@ -49,6 +49,37 @@ public class SecurityConfig {
 		return http.build();
 	}
 
+
+	// Improved for access control
+//	@Bean
+//	public SecurityFilterChain authorizeRequests(HttpSecurity http) throws Exception {
+//		http
+//				.csrf(csrf -> csrf.disable())
+//				.exceptionHandling(exception -> exception.authenticationEntryPoint(authEntry))
+//				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//				.authorizeHttpRequests(auth -> auth
+//						.requestMatchers("/user/signup", "/user/signin", "/property/all", "/property/{id}", "/review/property/{id}"
+//													,"/v*/api-doc*/**", "/swagger-ui/**").permitAll()
+//
+//						//  Buyer Access
+//						.requestMatchers("/wishlist/**", "/inquiry/submit", "/review/add").hasAuthority("BUYER")
+//
+//						//  Seller Access
+//						.requestMatchers("/property/add", "/property/update/**", "/property/delete/**",
+//								"/property/image/upload/**", "/property/image/delete/**",
+//								"/inquiry/property/**", "/inquiry/respond").hasAuthority("SELLER")
+//
+//						//  Admin Access
+//						.requestMatchers("/admin/**", "/property/status", "/property/delete/**").hasAuthority("ADMIN")
+//
+//						//  All other endpoints require authentication
+//						.anyRequest().authenticated()
+//				)
+//				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+//
+//		return http.build();
+//	}
+
 	//configure AuthMgr as a spring bean
 	@Bean
 	public AuthenticationManager authenticationManager

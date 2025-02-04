@@ -369,5 +369,37 @@ public class PropertyServiceImpl implements PropertyService {
         return new ApiResponse<>("Property has been " + statusMessage + " successfully!", null);
     }
 
+    @Override
+    public ApiResponse<List<PropertyResponseDTO>> getPropertiesBySeller(Long sellerId) {
+        Optional<User> sellerOpt = userEntityDao.findById(sellerId);
+
+        if (sellerOpt.isEmpty()) {
+            return new ApiResponse<>("Seller not found!", null);
+        }
+
+        List<Property> properties = propertyEntityDao.findBySellerId(sellerId);
+
+        if (properties.isEmpty()) {
+            return new ApiResponse<>("No properties found for this seller!", null);
+        }
+
+        List<PropertyResponseDTO> propertyDTOList = properties.stream()
+                .map(property -> {
+                    PropertyResponseDTO dto = modelMapper.map(property, PropertyResponseDTO.class);
+                    dto.setSellerName(property.getSeller().getFullName());
+                    dto.setSellerEmail(property.getSeller().getEmail());
+
+                    // ✅ Extract image URLs to avoid lazy loading issues
+                    List<String> imageUrls = property.getImages().stream()
+                            .map(PropertyImage::getImageUrl)
+                            .collect(Collectors.toList());
+                    dto.setImageUrls(imageUrls);
+
+                    return dto;
+                }).collect(Collectors.toList());
+
+        return new ApiResponse<>("Properties retrieved successfully!", propertyDTOList);
+    }
+
 
 }

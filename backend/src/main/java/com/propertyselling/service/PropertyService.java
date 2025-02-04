@@ -28,4 +28,6 @@ public interface PropertyService {
     ApiResponse<List<PropertyResponseDTO>> filterPropertiesByFurnishingStatus(boolean furnished);
 
     ApiResponse<?> updatePropertyStatus(PropertyStatusUpdateDTO dto);
+
+    ApiResponse<List<PropertyResponseDTO>> getPropertiesBySeller(Long sellerId);
 }
