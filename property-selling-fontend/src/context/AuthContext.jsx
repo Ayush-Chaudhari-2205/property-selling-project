@@ -1,47 +1,63 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
+import { API } from "../API";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    const token = localStorage.getItem("token");
-    return token ? jwtDecode(token) : null;
-  });
-
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      try {
-        const decodedUser = jwtDecode(token);
-        if (!decodedUser.email) throw new Error("JWT missing email");
-        setUser(decodedUser);
-      } catch (error) {
-        console.error("Invalid token, logging out:", error);
-        localStorage.removeItem("token");
-        setUser(null);
-        navigate("/login");
-      }
-    }
-  }, []);
+  const login = async (formData) => {
+        try {
 
-  const login = (token) => {
-    localStorage.setItem("token", token);
-    const decodedUser = jwtDecode(token);
-    setUser(decodedUser);
-    navigate("/");
+      const response = await axios.post(`${API}/user/signin`, formData);      
+      const token = response.data.jwt;
+      if (!token) throw new Error("No token received from backend");
+
+      localStorage.setItem("user",JSON.stringify(response.data)); // Store token
+      setUser(response.data); // Set the user only if the token is valid
+      navigate("/");
+
+    } catch (error) {
+      console.error("Login failed:", error.response?.data?.message || error.message);
+      alert("Login failed: " + (error.response?.data?.message || error.message));
+    }
+
+    // console.log("Received Token in Login:", token);
+    // localStorage.setItem("token", token); // Store token
+    // console.log("Stored Token After Setting:", localStorage.getItem("token")); // Verify storage
+
+    // try {
+    //   const decodedUser = jwtDecode(token);
+    //   console.log("Decoded User:", decodedUser);
+
+    //   if (!decodedUser.sub) throw new Error("JWT missing email");
+
+    //   setUser(decodedUser); // Set the user only if the token is valid
+    //   navigate("/dashboard");
+    // } catch (error) {
+    //   console.error("Error decoding token:", error);
+    //   localStorage.removeItem("token");
+    //   setUser(null);
+    //   alert("Invalid token. Please try logging in again.");
+    // }
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
+    console.log("Logging out...");
+    localStorage.removeItem("user");
     setUser(null);
     navigate("/login");
   };
 
-  return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, setUser,login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export default AuthContext;

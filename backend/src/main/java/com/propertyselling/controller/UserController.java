@@ -14,9 +14,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "*")
+
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
@@ -37,30 +38,30 @@ public class UserController {
         return ResponseEntity.ok(userService.addUser(dto));
     }
 
-    @PostMapping("/signin")
-    public ResponseEntity<?> signinUser(@RequestBody @Valid SigninRequestDTO reqDTO) {
-        System.out.println("in signin " + reqDTO);
-        // simply invoke authentucate(...) on AuthMgr
-        // i/p : Authentication => un verifed credentials
-        // i/f --> Authentication --> imple by UsernamePasswordAuthToken
-        // throws exc OR rets : verified credentials (UserDetails i.pl class: custom
-        // user details)
+        @PostMapping("/signin")
+        public ResponseEntity<?> signinUser(@RequestBody @Valid SigninRequestDTO reqDTO) {
+            System.out.println("in signin " + reqDTO);
+            // simply invoke authentucate(...) on AuthMgr
+            // i/p : Authentication => un verifed credentials
+            // i/f --> Authentication --> imple by UsernamePasswordAuthToken
+            // throws exc OR rets : verified credentials (UserDetails i.pl class: custom
+            // user details)
 
-        Authentication verifiedAuth = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken
-                        (reqDTO.getEmail(), reqDTO.getPassword()));
-//        System.out.println("getClass"+verifiedAuth.getClass());// Custom user details
-//        System.out.println("getDetails"+verifiedAuth.getDetails());// Custom user details
-//        System.out.println("getName"+verifiedAuth.getName());// Custom user details
-//        User authenticatedUser = (User) verifiedAuth.getPrincipal();
-//        // Convert User entity to UserResponseDTO
-//        UserResponseDTO userResponseDTO = modelMapper.map(authenticatedUser, UserResponseDTO.class);
+            Authentication verifiedAuth = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken
+                            (reqDTO.getEmail(), reqDTO.getPassword()));
+    //        System.out.println("getClass"+verifiedAuth.getClass());// Custom user details
+    //        System.out.println("getDetails"+verifiedAuth.getDetails());// Custom user details
+    //        System.out.println("getName"+verifiedAuth.getName());// Custom user details
+    //        User authenticatedUser = (User) verifiedAuth.getPrincipal();
+    //        // Convert User entity to UserResponseDTO
+    //        UserResponseDTO userResponseDTO = modelMapper.map(authenticatedUser, UserResponseDTO.class);
 
-        // => auth success
-        return ResponseEntity
-                .ok(new SigninResponseDTO(utils.generateJwtToken(verifiedAuth), verifiedAuth.getName()));
+            // => auth success
+            return ResponseEntity
+                    .ok(new SigninResponseDTO(utils.generateJwtToken(verifiedAuth), verifiedAuth.getName()));
 
-    }
+        }
     // get user based on id
     @GetMapping("/profile/{userId}")
     public ResponseEntity<?> getUserProfile(@PathVariable Long userId) {
