@@ -15,4 +15,10 @@ public interface UserService {
     ApiResponse<?> addOrUpdateAddress(Long userId, AddressDTO addressDTO);
 
     ApiResponse<?> updateUserProfile(Long userId, UserUpdateDTO dto);
+
+    ApiResponse<Long> countUsersExcludingAdmins();
+
+    ApiResponse<UserProfileDTO> getUserByEmail(String email);
+
+    ApiResponse<?> updateUserByEmail(String email, UserUpdateDTO dto);
 }

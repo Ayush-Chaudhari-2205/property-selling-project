@@ -30,4 +30,6 @@ public interface PropertyService {
     ApiResponse<?> updatePropertyStatus(PropertyStatusUpdateDTO dto);
 
     ApiResponse<List<PropertyResponseDTO>> getPropertiesBySeller(Long sellerId);
+
+    ApiResponse<Long> countActiveProperties();
 }

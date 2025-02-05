@@ -78,4 +78,9 @@ public class    PropertyController {
     public ResponseEntity<?> getPropertiesBySeller(@PathVariable Long sellerId) {
         return ResponseEntity.ok(propertyService.getPropertiesBySeller(sellerId));
     }
+
+    @GetMapping("/count/active")
+    public ResponseEntity<?> countActiveProperties() {
+        return ResponseEntity.ok(propertyService.countActiveProperties());
+    }
 }

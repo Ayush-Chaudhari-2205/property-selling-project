@@ -401,5 +401,11 @@ public class PropertyServiceImpl implements PropertyService {
         return new ApiResponse<>("Properties retrieved successfully!", propertyDTOList);
     }
 
+    @Override
+    public ApiResponse<Long> countActiveProperties() {
+        Long activePropertyCount = propertyEntityDao.countByIsActiveTrue();
+        return new ApiResponse<>("Total active properties retrieved successfully!", activePropertyCount);
+    }
+
 
 }

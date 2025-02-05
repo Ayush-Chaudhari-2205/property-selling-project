@@ -3,6 +3,7 @@ package com.propertyselling.service;
 import com.propertyselling.Entity.AadhaarCard;
 import com.propertyselling.Entity.Address;
 import com.propertyselling.Entity.User;
+import com.propertyselling.Entity.UserType;
 import com.propertyselling.dao.UserEntityDao;
 import com.propertyselling.dtos.*;
 import org.modelmapper.Conditions;
@@ -142,6 +143,72 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public ApiResponse<?> updateUserProfile(Long userId, UserUpdateDTO dto) {
         Optional<User> userOpt = userEntityDao.findById(userId);
+
+        if (userOpt.isEmpty()) {
+            return new ApiResponse<>("User not found!", null);
+        }
+
+        User user = userOpt.get();
+
+        // ✅ Use ModelMapper to update non-null fields only
+        modelMapper.getConfiguration().setPropertyCondition(Conditions.isNotNull());
+        modelMapper.map(dto, user);
+
+        // ✅ Update Aadhaar details if provided
+        if (dto.getAadhaarNumber() != null) {
+            if (user.getAadhaarCard() == null) {
+                user.setAadhaarCard(new AadhaarCard());
+            }
+            user.getAadhaarCard().setCardNo(dto.getAadhaarNumber());
+        }
+
+        // ✅ Update address using ModelMapper
+        if (dto.getAddress() != null) {
+            if (user.getAddress() == null) {
+                user.setAddress(new Address());
+            }
+            modelMapper.map(dto.getAddress(), user.getAddress());
+        }
+
+        userEntityDao.save(user);  // Save updated user details
+
+        return new ApiResponse<>("User profile updated successfully!", null);
+    }
+
+    @Override
+    public ApiResponse<Long> countUsersExcludingAdmins() {
+        Long userCount = userEntityDao.countByUserTypeNot(UserType.ADMIN);
+        return new ApiResponse<>("Total users excluding admins retrieved successfully!", userCount);
+    }
+
+    @Override
+    public ApiResponse<UserProfileDTO> getUserByEmail(String email) {
+        Optional<User> userOpt = userEntityDao.findByEmail(email);
+
+        if (userOpt.isEmpty()) {
+            return new ApiResponse<>("User not found!", null);
+        }
+
+        User user = userOpt.get();
+
+        // ✅ Convert entity to DTO using ModelMapper
+        UserProfileDTO userProfile = modelMapper.map(user, UserProfileDTO.class);
+
+        // ✅ Ensure Aadhaar number is included
+        userProfile.setAadhaarNumber(user.getAadhaarCard() != null ? user.getAadhaarCard().getCardNo() : null);
+
+        // ✅ Ensure address is included
+        if (user.getAddress() != null) {
+            userProfile.setAddress(modelMapper.map(user.getAddress(), AddressDTO.class));
+        }
+
+        return new ApiResponse<>("User retrieved successfully!", userProfile);
+    }
+
+    @Override
+    @Transactional
+    public ApiResponse<?> updateUserByEmail(String email, UserUpdateDTO dto) {
+        Optional<User> userOpt = userEntityDao.findByEmail(email);
 
         if (userOpt.isEmpty()) {
             return new ApiResponse<>("User not found!", null);
