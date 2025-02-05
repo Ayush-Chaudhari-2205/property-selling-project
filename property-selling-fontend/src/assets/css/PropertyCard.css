@@ -1,0 +1,21 @@
+/* src/assets/css/PropertyCard.css */
+.property-card {
+  border-radius: 10px;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.property-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.property-img {
+  height: 200px;
+  object-fit: cover;
+}
+
+.property-features {
+  font-size: 14px;
+  color: #6c757d;
+}

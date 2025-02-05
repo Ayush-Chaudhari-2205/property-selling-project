@@ -26,6 +26,8 @@ export const AuthProvider = ({ children }) => {
       // localStorage.setItem("token", jwt); // Store only token
       localStorage.setItem("user", JSON.stringify(response.data)); // Store user separately
       setUser(response.data); // Set user state
+      console.log(user);
+      
       navigate("/");
     } catch (error) {
       console.error("Login failed:", error.response?.data?.message || error.message);
