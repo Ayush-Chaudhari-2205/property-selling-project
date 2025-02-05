@@ -18,8 +18,17 @@ const App = () => {
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
+    console.log("storedUser App", storedUser);
+
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      // Ensure it's not null or undefined
+      console.log("working");
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error("Error parsing storedUser:", error);
+        localStorage.removeItem("user"); // Remove corrupted data if any
+      }
     }
   }, []);
 
@@ -29,8 +38,14 @@ const App = () => {
       <Route path="/" element={<RootLayout />}>
         <Route index element={<Home />} />
         <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <Login />} />
-        <Route path="/signup" element={user ? <Navigate to="/dashboard" replace /> : <Signup />} />
+        <Route
+          path="/login"
+          element={ <Login />}
+        />
+        <Route
+          path="/signup"
+          element={ <Signup />}
+        />
       </Route>
 
       {/* Private Routes */}
@@ -41,7 +56,7 @@ const App = () => {
       </Route>
 
       <Route path="/profile" element={<PrivateRoute />}>
-        <Route element={<Profile />} />
+        <Route index element={<Profile />} />
       </Route>
 
       {/* Redirect all unknown routes */}
