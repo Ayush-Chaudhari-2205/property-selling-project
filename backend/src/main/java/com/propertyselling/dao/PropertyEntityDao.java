@@ -31,4 +31,7 @@ public interface PropertyEntityDao extends JpaRepository<Property,Long  >
 
     // ✅ Fetch properties owned by a specific seller
     List<Property> findBySellerId(Long sellerId);
+
+    // ✅ Count total active properties
+    Long countByIsActiveTrue();
 }

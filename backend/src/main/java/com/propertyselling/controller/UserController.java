@@ -61,10 +61,16 @@ public class UserController {
                 .ok(new SigninResponseDTO(utils.generateJwtToken(verifiedAuth), verifiedAuth.getName()));
 
     }
-
+    // get user based on id
     @GetMapping("/profile/{userId}")
     public ResponseEntity<?> getUserProfile(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getUserProfile(userId));
+    }
+
+    //get user based on email
+    @GetMapping("/profile/get-by-email")
+    public ResponseEntity<?> getUserByEmail(@RequestParam String email) {
+        return ResponseEntity.ok(userService.getUserByEmail(email));
     }
 
     @PutMapping("/aadhaar")
@@ -85,5 +91,15 @@ public class UserController {
     @PutMapping("/update/{userId}")
     public ResponseEntity<?> updateUserProfile(@PathVariable Long userId, @RequestBody UserUpdateDTO dto) {
         return ResponseEntity.ok(userService.updateUserProfile(userId, dto));
+    }
+
+    @PutMapping("/update/update-by-email")
+    public ResponseEntity<?> updateUserByEmail(@RequestParam String email, @RequestBody UserUpdateDTO dto) {
+        return ResponseEntity.ok(userService.updateUserByEmail(email, dto));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<?> countUsersExcludingAdmins() {
+        return ResponseEntity.ok(userService.countUsersExcludingAdmins());
     }
 }
