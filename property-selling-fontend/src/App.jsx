@@ -14,33 +14,14 @@ import Dashboard from "./pages/Dashboard";
 import AuthContext from "./context/AuthContext";
 
 const App = () => {
-  const { user,setUser } = useContext(AuthContext);
-
-  const isAuthenticated =  () => {
-
-    // console.log("Stored Token After Setting:", localStorage.getItem("token")); // Verify storage
-
-
-          const localuser =  localStorage.getItem("user")
-          console.log("user in app",user);
-          
-          if(localuser!== null)
-          {
-            console.log("working in user in app");
-            
-      setUser(JSON.parse(localuser));
-          }
-
-    }
-
-
-  
+  const { user, setUser } = useContext(AuthContext);
 
   useEffect(() => {
-    return isAuthenticated
-
-  }, [])
-  
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   return (
     <Routes>
@@ -48,18 +29,22 @@ const App = () => {
       <Route path="/" element={<RootLayout />}>
         <Route index element={<Home />} />
         <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
-        <Route path="/signup" element={user ? <Navigate to="/" replace /> : <Signup />} />
+        <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <Login />} />
+        <Route path="/signup" element={user ? <Navigate to="/dashboard" replace /> : <Signup />} />
       </Route>
 
+      {/* Private Routes */}
+      <Route path="/dashboard" element={<PrivateRoute />}>
+        <Route element={<DashboardLayout />}>
+          <Route index element={<Dashboard />} />
+        </Route>
+      </Route>
 
-          <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route index element={<Dashboard />} />
-          </Route>
-          <Route path="/profile" element={<Profile />} /> {/* Add this Route */}
+      <Route path="/profile" element={<PrivateRoute />}>
+        <Route element={<Profile />} />
+      </Route>
 
-
-      {/* Redirect all other unknown routes */}
+      {/* Redirect all unknown routes */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
