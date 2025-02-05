@@ -22,7 +22,7 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {4
+    try {
       const response = await axios.post(`${API}/user/signup`, formData);
       alert(response.data.message);
       login(response.data.data.token);
@@ -39,26 +39,83 @@ const Signup = () => {
           <div className="block-heading">
             <h2 className="text-info">Registration</h2>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.
+              Please fill in the form to create an account. Choose whether you want to register as a Buyer or Seller.
             </p>
           </div>
           <form onSubmit={handleSubmit}>
+            {/* Role Selection */}
             <div className="mb-3">
-              <label className="form-label" htmlFor="fullName">Name</label>
-              <input className="form-control item" type="text" id="fullName" name="fullName" value={formData.fullName} onChange={handleChange} required />
+              <label className="form-label" htmlFor="userType">Select Role</label>
+              <select 
+                className="form-control item" 
+                id="userType" 
+                name="userType" 
+                value={formData.userType} 
+                onChange={handleChange} 
+                required
+              >
+                <option value="BUYER">Buyer</option>
+                <option value="SELLER">Seller</option>
+              </select>
             </div>
+
+            {/* Full Name */}
             <div className="mb-3">
-              <label className="form-label" htmlFor="password">Password</label>
-              <input className="form-control item" type="password" id="password" name="password" value={formData.password} onChange={handleChange} required />
+              <label className="form-label" htmlFor="fullName">Full Name</label>
+              <input 
+                className="form-control item" 
+                type="text" 
+                id="fullName" 
+                name="fullName" 
+                value={formData.fullName} 
+                onChange={handleChange} 
+                required 
+              />
             </div>
+
+            {/* Email */}
             <div className="mb-3">
               <label className="form-label" htmlFor="email">Email</label>
-              <input className="form-control item" type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
+              <input 
+                className="form-control item" 
+                type="email" 
+                id="email" 
+                name="email" 
+                value={formData.email} 
+                onChange={handleChange} 
+                required 
+              />
             </div>
+
+            {/* Mobile Number */}
             <div className="mb-3">
               <label className="form-label" htmlFor="mobileNumber">Mobile Number</label>
-              <input className="form-control item" type="text" id="mobileNumber" name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} required />
+              <input 
+                className="form-control item" 
+                type="text" 
+                id="mobileNumber" 
+                name="mobileNumber" 
+                value={formData.mobileNumber} 
+                onChange={handleChange} 
+                required 
+              />
             </div>
+
+            {/* Password */}
+            <div className="mb-3">
+              <label className="form-label" htmlFor="password">Password</label>
+              <input 
+                className="form-control item" 
+                type="password" 
+                id="password" 
+                name="password" 
+                value={formData.password} 
+                onChange={handleChange} 
+                required 
+              />
+            </div>
+
+            {/* Submit Button */}
             <button className="btn btn-primary" type="submit">Sign Up</button>
           </form>
         </div>
