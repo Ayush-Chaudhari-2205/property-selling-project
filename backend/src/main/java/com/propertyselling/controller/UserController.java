@@ -3,6 +3,7 @@ package com.propertyselling.controller;
 
 import com.propertyselling.Entity.User;
 import com.propertyselling.dtos.*;
+import com.propertyselling.security.CustomUserDetails;
 import com.propertyselling.security.JwtUtils;
 import com.propertyselling.service.UserService;
 import jakarta.validation.Valid;
@@ -57,9 +58,23 @@ public class UserController {
     //        // Convert User entity to UserResponseDTO
     //        UserResponseDTO userResponseDTO = modelMapper.map(authenticatedUser, UserResponseDTO.class);
 
+            CustomUserDetails userDetails = (CustomUserDetails)verifiedAuth.getPrincipal();
+            User user = userDetails.getUser();
+
+             SigninResponseDTO localUser = new SigninResponseDTO();
+
+             localUser.setJwt(utils.generateJwtToken(verifiedAuth));
+             localUser.setEmail(user.getEmail());
+             localUser.setUser_id(user.getId());
+             localUser.setFullName(user.getFullName());
+             localUser.setRole(user.getUserType());
+             localUser.setMobileNo(user.getMobileNumber());
+
+
+
             // => auth success
             return ResponseEntity
-                    .ok(new SigninResponseDTO(utils.generateJwtToken(verifiedAuth), verifiedAuth.getName()));
+                    .ok(localUser);
 
         }
     // get user based on id

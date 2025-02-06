@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
-import Profile from "./pages/Profile"; // Ensure Profile is imported
+import Profile from "./pages/Profile";
 import Logout from "./pages/Logout";
 import RootLayout from "./Layout/RootLayout";
 import Home from "./pages/Home";
@@ -12,25 +12,23 @@ import ContactUs from "./pages/ContactUs";
 import DashboardLayout from "./Layout/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
 import AuthContext from "./context/AuthContext";
+import ListProperties from "./pages/seller/ListProperties";
+import PropertyDetail from "./pages/PropertyDetail";
 
 const App = () => {
   const { user, setUser } = useContext(AuthContext);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    console.log("storedUser App", storedUser);
-
     if (storedUser) {
-      // Ensure it's not null or undefined
-      console.log("working");
       try {
         setUser(JSON.parse(storedUser));
       } catch (error) {
         console.error("Error parsing storedUser:", error);
-        localStorage.removeItem("user"); // Remove corrupted data if any
+        localStorage.removeItem("user");
       }
     }
-  }, []);
+  }, [setUser]);
 
   return (
     <Routes>
@@ -38,28 +36,25 @@ const App = () => {
       <Route path="/" element={<RootLayout />}>
         <Route index element={<Home />} />
         <Route path="/contact-us" element={<ContactUs />} />
-        <Route
-          path="/login"
-          element={ <Login />}
-        />
-        <Route
-          path="/signup"
-          element={ <Signup />}
-        />
+        <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
+        <Route path="/signup" element={user ? <Navigate to="/" replace /> : <Signup />} />
       </Route>
 
       {/* Private Routes */}
-      <Route path="/dashboard" element={<PrivateRoute />}>
-        <Route element={<DashboardLayout />}>
+      <Route element={<PrivateRoute />}>
+        <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
         </Route>
+        <Route path="/profile" element={<Profile />} />
       </Route>
 
-      <Route path="/profile" element={<PrivateRoute />}>
-        <Route index element={<Profile />} />
+      {/* Seller Routes - Accessible Only to Sellers */}
+      <Route element={<PrivateRoute requiredRole="SELLER" />}>
+        <Route path="/seller/properties" element={<ListProperties />} />
+        <Route path="/seller/property/:id" element={<PropertyDetail />} />
       </Route>
 
-      {/* Redirect all unknown routes */}
+      {/* Catch-All Route for Not Found */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
