@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -45,21 +46,23 @@ public class JwtUtils {
 	public String generateJwtToken(Authentication authentication) {
 		log.info("generate jwt token " + authentication);
 		CustomUserDetails userPrincipal = (CustomUserDetails) authentication.getPrincipal();
-//JWT : userName,issued at ,exp date,digital signature(does not typically contain password , can contain authorities
-		return Jwts.builder() // JWTs : a Factory class , used to create JWT tokens
-				.setSubject((userPrincipal.getUsername())) // setting subject part of the token(typically user
-															// name/email)
-				.setIssuedAt(new Date())// Sets the JWT Claims iat (issued at) value of current date
-				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))// Sets the JWT Claims exp
-																					// (expiration) value.
-				// setting a custom claim
-				.claim("authorities", getAuthoritiesInString(userPrincipal.getAuthorities()))
-				.signWith(key, SignatureAlgorithm.HS512) // Signs the constructed JWT using the specified
-															// algorithm with the specified key, producing a
-															// JWS(Json web signature=signed JWT)
 
-				// Using token signing algo : HMAC using SHA-512
-				.compact();// Actually builds the JWT and serializes it to a compact, URL-safe string
+		return Jwts.builder()
+				.setSubject((userPrincipal.getUsername()))
+				.setIssuedAt(new Date())
+				.setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+
+				.claim("authorities", "ROLE_" + userPrincipal.getUser().getUserType().toString())
+
+				.claim("user_id", userPrincipal.getUser().getId())
+				.claim("email", userPrincipal.getUser().getEmail())
+				.claim("fullName", userPrincipal.getUser().getFullName())
+				.claim("mobileNo", userPrincipal.getUser().getMobileNumber())
+				.claim("role", userPrincipal.getUser().getUserType().toString())
+				.signWith(key, SignatureAlgorithm.HS512)
+
+
+				.compact();
 	}
 
 	// this method will be invoked by our custom JWT filter
@@ -67,31 +70,48 @@ public class JwtUtils {
 		return claims.getSubject();
 	}
 
-	// this method will be invoked by our custom filter
+
 	public Claims validateJwtToken(String jwtToken) {
-		// try {
-		Claims claims = Jwts.parserBuilder().setSigningKey(key).build().
-		// Sets the signing key used to verify JWT digital signature.
-				parseClaimsJws(jwtToken).getBody();// Parses the signed JWT returns the resulting Jws<Claims> instance
-		// throws exc in case of failures in verification
+
+		Claims claims = Jwts.parserBuilder()
+						.setSigningKey(key)
+						.build()
+						.parseClaimsJws(jwtToken)
+						.getBody();
+
+		System.out.println("User ID: " + claims.get("user_id", Long.class));
+		System.out.println("Email: " + claims.get("email", String.class));
+		System.out.println("Full Name: " + claims.get("fullName", String.class));
+		System.out.println("Mobile No: " + claims.get("mobileNo", String.class));
+		System.out.println("Role: " + claims.get("role", String.class));
+
+
 		return claims;		
 	}
-	// Accepts Collection<GrantedAuthority> n rets comma separated list of it's
-	// string form
+
 
 	private String getAuthoritiesInString(Collection<? extends GrantedAuthority> authorities) {
-		String authorityString = authorities.stream().
-				map(authority -> authority.getAuthority())
+		return authorities.stream()
+				.map(GrantedAuthority::getAuthority)
 				.collect(Collectors.joining(","));
-		System.out.println(authorityString);
-		return authorityString;
 	}
 
 	public List<GrantedAuthority> getAuthoritiesFromClaims(Claims claims) {
-		String authString = (String) claims.get("authorities");
-		List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authString);
-		authorities.forEach(System.out::println);
-		return authorities;
+		String authString = claims.get("authorities", String.class);
+		return AuthorityUtils.commaSeparatedStringToAuthorityList(authString);
+	}
+
+	public Long getUserIdFromJwtToken(Claims claims) {
+		return claims.get("user_id", Long.class);
+	}
+
+	public Authentication populateAuthenticationTokenFromJWT(String jwt) {
+		Claims claims = validateJwtToken(jwt);
+		String email = getUserNameFromJwtToken(claims);
+		List<GrantedAuthority> authorities = getAuthoritiesFromClaims(claims);
+		Long userId = getUserIdFromJwtToken(claims);
+
+		return new UsernamePasswordAuthenticationToken(email, userId, authorities);
 	}
 
 }

@@ -39,7 +39,7 @@ public class SecurityConfig {
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers("/","/user/signup","/user/signin", "/v*/api-doc*/**", "/swagger-ui/**").permitAll()
 						.requestMatchers(HttpMethod.OPTIONS).permitAll()
-						.requestMatchers("/property/add").hasAuthority("SELLER")
+						.requestMatchers("/property/add").hasAuthority("ROLE_SELLER")
 						.requestMatchers("/products/purchase").hasRole("CUSTOMER")
 						.requestMatchers("/products/add").hasRole("ADMIN")
 						.anyRequest().authenticated()

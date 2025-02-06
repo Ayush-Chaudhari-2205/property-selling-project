@@ -5,6 +5,7 @@ import AuthContext from "../context/AuthContext";
 
 function NavBar() {
   const { user } = useContext(AuthContext);
+  const isSeller = user?.role === "SELLER"; // Check if the user is a Seller
 
   return (
     <nav className="navbar navbar-expand-lg fixed-top bg-body clean-navbar">
@@ -21,6 +22,18 @@ function NavBar() {
             <li className="nav-item"><Link className="nav-link" to="/pricing">Pricing</Link></li>
             <li className="nav-item"><Link className="nav-link" to="/about-us">About Us</Link></li>
             <li className="nav-item"><Link className="nav-link" to="/contact-us">Contact Us</Link></li>
+
+
+            {/* Seller-Specific Links */}
+            {isSeller && (
+              <>
+                <li className="nav-item"><Link className="nav-link" to="/seller/properties">My Properties</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/seller/inquiries">Inquiries</Link></li>
+              </>
+            )}
+
+
+
             {user ? (
               <>
                 <li className="nav-item"><Link className="nav-link" to="/profile">Profile</Link></li>
