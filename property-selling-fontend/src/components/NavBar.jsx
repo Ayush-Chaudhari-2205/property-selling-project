@@ -10,7 +10,7 @@ function NavBar() {
   return (
     <nav className="navbar navbar-expand-lg fixed-top bg-body clean-navbar">
       <div className="container">
-        <Link className="navbar-brand logo" to="/">RadientProperty</Link>
+        <Link className="navbar-brand logo" to="/">RadiantProperty</Link>
         <button data-bs-toggle="collapse" className="navbar-toggler" data-bs-target="#navcol-1">
           <span className="visually-hidden">Toggle navigation</span>
           <span className="navbar-toggler-icon"></span>
@@ -43,6 +43,7 @@ function NavBar() {
               <li className="nav-item"><Link className="nav-link" to="/login">Login</Link></li>
             )}
           </ul>
+
         </div>
       </div>
     </nav>
