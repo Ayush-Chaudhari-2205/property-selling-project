@@ -32,4 +32,6 @@ public interface PropertyService {
     ApiResponse<List<PropertyResponseDTO>> getPropertiesBySeller(Long sellerId);
 
     ApiResponse<Long> countActiveProperties();
+
+    ApiResponse<List<PropertyResponseDTO>> filterProperties(String type, Double minPrice, Double maxPrice, String city, String state, Boolean furnished);
 }

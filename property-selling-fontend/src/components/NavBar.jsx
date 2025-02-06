@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import AuthContext from "../context/AuthContext";
 
 function NavBar() {
-  const { user } = useContext(AuthContext);
+  const { user} = useContext(AuthContext);
   const isSeller = user?.role === "SELLER"; // Check if the user is a Seller
 
   return (
@@ -22,6 +22,8 @@ function NavBar() {
             <li className="nav-item"><Link className="nav-link" to="/pricing">Pricing</Link></li>
             <li className="nav-item"><Link className="nav-link" to="/about-us">About Us</Link></li>
             <li className="nav-item"><Link className="nav-link" to="/contact-us">Contact Us</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/properties">Find Properties</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/wishlist">Wishlist</Link></li>
 
 
             {/* Seller-Specific Links */}
@@ -38,6 +40,7 @@ function NavBar() {
               <>
                 <li className="nav-item"><Link className="nav-link" to="/profile">Profile</Link></li>
                 <li className="nav-item"><Link className="nav-link" to="/logout">Logout</Link></li>
+                {/* <li className="nav-item"><button className="btn btn-danger" onClick={logout}>Logout</button></li> */}
               </>
             ) : (
               <li className="nav-item"><Link className="nav-link" to="/login">Login</Link></li>

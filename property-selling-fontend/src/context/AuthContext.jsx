@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
     console.log("Logging out...");
     localStorage.removeItem("user");
     setUser(null);
-    navigate("/login");
+    navigate("/");
   };
 
   return <AuthContext.Provider value={{ user, setUser, login, logout }}>{children}</AuthContext.Provider>;
