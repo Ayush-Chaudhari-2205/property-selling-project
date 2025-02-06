@@ -24,6 +24,11 @@ public class CustomUserDetails implements UserDetails {
 				SimpleGrantedAuthority(user.getUserType().toString()));
 	}
 
+	public User getUser()
+	{
+		return user;
+	}
+
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
@@ -34,6 +39,11 @@ public class CustomUserDetails implements UserDetails {
 	public String getUsername() {
 		// TODO Auto-generated method stub
 		return user.getEmail();
+	}
+
+	public String getUserName() {
+		// TODO Auto-generated method stub
+		return user.getFullName();
 	}
 
 	@Override
