@@ -14,6 +14,9 @@ import Dashboard from "./pages/Dashboard";
 import AuthContext from "./context/AuthContext";
 import ListProperties from "./pages/seller/ListProperties";
 import PropertyDetail from "./pages/PropertyDetail";
+import AddProperty from "./pages/seller/AddProperty";
+import PropertySearch from "./pages/PropertySearch";
+import Wishlist from "./pages/Wishlist";
 
 const App = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -38,6 +41,11 @@ const App = () => {
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
         <Route path="/signup" element={user ? <Navigate to="/" replace /> : <Signup />} />
+        <Route path="/property/:id" element={<PropertyDetail />} /> 
+        <Route path="/properties" element={<PropertySearch />} />
+        <Route path="/logout" element={user ? <Navigate to="/" replace /> : <Logout />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+
       </Route>
 
       {/* Private Routes */}
@@ -52,6 +60,7 @@ const App = () => {
       <Route element={<PrivateRoute requiredRole="SELLER" />}>
         <Route path="/seller/properties" element={<ListProperties />} />
         <Route path="/seller/property/:id" element={<PropertyDetail />} />
+        <Route path="/seller/property/add" element={<AddProperty />} /> 
       </Route>
 
       {/* Catch-All Route for Not Found */}

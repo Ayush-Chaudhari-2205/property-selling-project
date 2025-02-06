@@ -83,4 +83,23 @@ public class    PropertyController {
     public ResponseEntity<?> countActiveProperties() {
         return ResponseEntity.ok(propertyService.countActiveProperties());
     }
+
+
+    //filter for all the properties
+    @GetMapping("/filter/all")
+    public ResponseEntity<?> filterProperties(
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String state,
+            @RequestParam(required = false) Boolean furnished) {
+
+        // ✅ Convert empty strings to null
+        type = (type != null && !type.trim().isEmpty()) ? type : null;
+        city = (city != null && !city.trim().isEmpty()) ? city : null;
+        state = (state != null && !state.trim().isEmpty()) ? state : null;
+
+        return ResponseEntity.ok(propertyService.filterProperties(type, minPrice, maxPrice, city, state, furnished));
+    }
 }

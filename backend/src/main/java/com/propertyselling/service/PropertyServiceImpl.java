@@ -407,5 +407,20 @@ public class PropertyServiceImpl implements PropertyService {
         return new ApiResponse<>("Total active properties retrieved successfully!", activePropertyCount);
     }
 
+    @Override
+    public ApiResponse<List<PropertyResponseDTO>> filterProperties(String type, Double minPrice, Double maxPrice, String city, String state, Boolean furnished) {
+        List<Property> properties = propertyEntityDao.filterProperties(type, minPrice, maxPrice, city, state, furnished);
+
+        if (properties.isEmpty()) {
+            return new ApiResponse<>("No properties match your criteria!", null);
+        }
+
+        List<PropertyResponseDTO> propertyDTOList = properties.stream()
+                .map(property -> modelMapper.map(property, PropertyResponseDTO.class))
+                .collect(Collectors.toList());
+
+        return new ApiResponse<>("Filtered properties retrieved successfully!", propertyDTOList);
+    }
+
 
 }
