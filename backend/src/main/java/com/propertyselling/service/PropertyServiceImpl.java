@@ -98,6 +98,7 @@ public class PropertyServiceImpl implements PropertyService {
                     PropertyResponseDTO dto = modelMapper.map(property, PropertyResponseDTO.class);
                     dto.setSellerName(property.getSeller().getFullName());
                     dto.setSellerEmail(property.getSeller().getEmail());
+                    dto.setIsActive(property.isActive());
 
                     // ✅ Extract image URLs to avoid lazy loading issues
                     List<String> imageUrls = property.getImages().stream()
