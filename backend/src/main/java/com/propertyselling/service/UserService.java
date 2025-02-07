@@ -3,6 +3,8 @@ package com.propertyselling.service;
 import com.propertyselling.Entity.User;
 import com.propertyselling.dtos.*;
 
+import java.util.List;
+
 public interface UserService {
     public ApiResponse<User> addUser(UserSignupDTO dto);
 
@@ -21,4 +23,6 @@ public interface UserService {
     ApiResponse<UserProfileDTO> getUserByEmail(String email);
 
     ApiResponse<?> updateUserByEmail(String email, UserUpdateDTO dto);
+
+    ApiResponse<List<UserProfileDTO>> getAllNonAdminUsers();
 }

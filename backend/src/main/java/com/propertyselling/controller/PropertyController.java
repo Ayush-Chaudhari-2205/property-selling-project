@@ -32,6 +32,11 @@ public class    PropertyController {
         return ResponseEntity.ok(propertyService.getAllProperties());
     }
 
+    @GetMapping("/all-active")
+    public ResponseEntity<?> getAllActiveProperties() {
+        return ResponseEntity.ok(propertyService.getAllActiveProperties());
+    }
+
     @PutMapping("/update")
     public ResponseEntity<?> updateProperty(@RequestBody PropertyUpdateDTO dto) {
         return ResponseEntity.ok(propertyService.updateProperty(dto));

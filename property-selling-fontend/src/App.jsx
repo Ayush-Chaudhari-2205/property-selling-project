@@ -17,6 +17,9 @@ import PropertyDetail from "./pages/PropertyDetail";
 import AddProperty from "./pages/seller/AddProperty";
 import PropertySearch from "./pages/PropertySearch";
 import Wishlist from "./pages/Wishlist";
+import ManageUsers from "./pages/admin/ManageUsers";
+import ManageProperties from "./pages/admin/ManageProperties";
+import ManageInquiries from "./pages/seller/ManageInquiries";
 
 const App = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -56,11 +59,15 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
       </Route>
 
+       <Route path="/admin/users" element={<ManageUsers />} />
+       <Route path="/admin/properties" element={<ManageProperties />} />
+
       {/* Seller Routes - Accessible Only to Sellers */}
       <Route element={<PrivateRoute requiredRole="SELLER" />}>
         <Route path="/seller/properties" element={<ListProperties />} />
         <Route path="/seller/property/:id" element={<PropertyDetail />} />
         <Route path="/seller/property/add" element={<AddProperty />} /> 
+        <Route path="/seller/inquiries" element={<ManageInquiries />} />
       </Route>
 
       {/* Catch-All Route for Not Found */}

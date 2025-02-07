@@ -1,9 +1,6 @@
 package com.propertyselling.service;
 
-import com.propertyselling.Entity.AadhaarCard;
-import com.propertyselling.Entity.Address;
-import com.propertyselling.Entity.User;
-import com.propertyselling.Entity.UserType;
+import com.propertyselling.Entity.*;
 import com.propertyselling.dao.UserEntityDao;
 import com.propertyselling.dtos.*;
 import org.modelmapper.Conditions;
@@ -13,7 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -240,4 +239,21 @@ public class UserServiceImpl implements UserService {
 
         return new ApiResponse<>("User profile updated successfully!", null);
     }
+
+    @Override
+    public ApiResponse<List<UserProfileDTO>> getAllNonAdminUsers() {
+        List<User> nonAdminUsers = userEntityDao.findByIsActiveFalseAndUserTypeNot(UserType.ADMIN);
+
+        if (nonAdminUsers.isEmpty()) {
+            return new ApiResponse<>("No active non-admin users found!", null);
+        }
+
+        List<UserProfileDTO> userDTOList = nonAdminUsers.stream()
+                .map(user -> modelMapper.map(user, UserProfileDTO.class))
+                .collect(Collectors.toList());
+
+        return new ApiResponse<>("Active non-admin users retrieved successfully!", userDTOList);
+    }
+
+
 }

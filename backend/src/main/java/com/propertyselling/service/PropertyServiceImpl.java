@@ -423,4 +423,31 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
 
+    @Override
+    public ApiResponse<List<PropertyResponseDTO>> getAllActiveProperties() {
+        List<Property> properties = propertyEntityDao.findAllActiveProperties(); // ✅ Fetch only active properties
+
+        if (properties.isEmpty()) {
+            return new ApiResponse<>("No active properties found!", null);
+        }
+
+        List<PropertyResponseDTO> propertyDTOList = properties.stream()
+                .map(property -> {
+                    PropertyResponseDTO dto = modelMapper.map(property, PropertyResponseDTO.class);
+                    dto.setSellerName(property.getSeller().getFullName());
+                    dto.setSellerEmail(property.getSeller().getEmail());
+
+                    // ✅ Extract image URLs to avoid lazy loading issues
+                    List<String> imageUrls = property.getImages().stream()
+                            .map(PropertyImage::getImageUrl)
+                            .collect(Collectors.toList());
+                    dto.setImageUrls(imageUrls);
+
+                    return dto;
+                }).collect(Collectors.toList());
+
+        return new ApiResponse<>("Active properties fetched successfully!", propertyDTOList);
+    }
+
+
 }

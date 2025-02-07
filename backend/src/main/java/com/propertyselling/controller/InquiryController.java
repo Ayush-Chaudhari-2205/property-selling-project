@@ -30,6 +30,11 @@ public class InquiryController {
         return ResponseEntity.ok(inquiryService.respondToInquiry(dto));
     }
 
+    @GetMapping("/seller/{sellerId}")
+    public ResponseEntity<?> getInquiriesForSeller(@PathVariable Long sellerId) {
+        return ResponseEntity.ok(inquiryService.getInquiriesForSeller(sellerId));
+    }
+
 
 }
 
