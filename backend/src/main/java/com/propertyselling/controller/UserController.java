@@ -118,4 +118,9 @@ public class UserController {
     public ResponseEntity<?> countUsersExcludingAdmins() {
         return ResponseEntity.ok(userService.countUsersExcludingAdmins());
     }
+
+    @GetMapping("/active-non-admin-users")
+    public ResponseEntity<?> getAllNonAdminUsers() {
+        return ResponseEntity.ok(userService.getAllNonAdminUsers());
+    }
 }

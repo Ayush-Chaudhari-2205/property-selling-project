@@ -7,10 +7,7 @@ import com.propertyselling.Entity.UserType;
 import com.propertyselling.dao.InquiryEntityDao;
 import com.propertyselling.dao.PropertyEntityDao;
 import com.propertyselling.dao.UserEntityDao;
-import com.propertyselling.dtos.ApiResponse;
-import com.propertyselling.dtos.InquiryRequestDTO;
-import com.propertyselling.dtos.InquiryResponseDTO;
-import com.propertyselling.dtos.InquiryResponseUpdateDTO;
+import com.propertyselling.dtos.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -117,6 +114,31 @@ public class InquiryServiceImpl implements InquiryService {
         inquiryEntityDao.save(inquiry);
 
         return new ApiResponse<>("Inquiry response updated successfully!", null);
+    }
+
+    @Override
+    public ApiResponse<List<BuyerInquiryDTO>> getInquiriesForSeller(Long sellerId) {
+        List<Inquiry> inquiries = inquiryEntityDao.findByPropertySellerId(sellerId);
+
+        if (inquiries.isEmpty()) {
+            return new ApiResponse<>("No inquiries found for this seller!", null);
+        }
+
+        List<BuyerInquiryDTO> inquiryDTOList = inquiries.stream()
+                .map(inquiry -> {
+                    BuyerInquiryDTO dto = new BuyerInquiryDTO();
+                    dto.setInquiryId(inquiry.getId()); // ✅ Ensure `inquiryId` is set
+                    dto.setPropertyId(inquiry.getProperty().getId());
+                    dto.setPropertyName(inquiry.getProperty().getName());
+                    dto.setBuyerName(inquiry.getBuyer().getFullName());
+                    dto.setBuyerEmail(inquiry.getBuyer().getEmail());
+                    dto.setMessage(inquiry.getMessage());
+                    dto.setResponded(inquiry.isResponded());
+                    dto.setCreatedAt(inquiry.getCreatedOn()); // ✅ Ensure `createdAt` is set
+                    return dto;
+                }).collect(Collectors.toList());
+
+        return new ApiResponse<>("Inquiries retrieved successfully!", inquiryDTOList);
     }
 
 

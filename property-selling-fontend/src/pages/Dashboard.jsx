@@ -1,74 +1,61 @@
-// src/pages/admin/AdminDashboard.jsx
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { API } from "../API";
+import AuthContext from "../context/AuthContext";
 
-const Dashboard = () => {
+const AdminDashboard = () => {
+  const { user } = useContext(AuthContext);
+  const [userCount, setUserCount] = useState(0);
+  const [propertyCount, setPropertyCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const userResponse = await axios.get(`${API}/user/count`, {
+          headers: { Authorization: `Bearer ${user.jwt}` },
+        });
+        const propertyResponse = await axios.get(
+          `${API}/property/count/active`,
+          {
+            headers: { Authorization: `Bearer ${user.jwt}` },
+          }
+        );
+
+        // Correctly extract the count from "data" field
+        if (userResponse.data && userResponse.data.data !== undefined) {
+          setUserCount(userResponse.data.data);
+        }
+        if (propertyResponse.data && propertyResponse.data.data !== undefined) {
+          setPropertyCount(propertyResponse.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching admin stats:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  if (loading)
+    return <div className="text-center mt-4">Loading dashboard...</div>;
+
   return (
-    <div id="content">
-      {/* Topbar */}
-      <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-        <h1 className="h3 mb-0 text-gray-800">Admin Dashboard</h1>
-      </nav>
-
-      {/* Main Content */}
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-xl-3 col-md-6 mb-4">
-            <div className="card border-left-primary shadow h-100 py-2">
-              <div className="card-body">
-                <div className="row no-gutters align-items-center">
-                  <div className="col mr-2">
-                    <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                      Total Users
-                    </div>
-                    <div className="h5 mb-0 font-weight-bold text-gray-800">
-                      120
-                    </div>
-                  </div>
-                  <div className="col-auto">
-                    <i className="fas fa-users fa-2x text-gray-300"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="col-xl-3 col-md-6 mb-4">
-            <div className="card border-left-success shadow h-100 py-2">
-              <div className="card-body">
-                <div className="row no-gutters align-items-center">
-                  <div className="col mr-2">
-                    <div className="text-xs font-weight-bold text-success text-uppercase mb-1">
-                      Properties Listed
-                    </div>
-                    <div className="h5 mb-0 font-weight-bold text-gray-800">
-                      45
-                    </div>
-                  </div>
-                  <div className="col-auto">
-                    <i className="fas fa-home fa-2x text-gray-300"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
+    <div className="container mt-4">
+      <h2 className="text-center">Admin Dashboard</h2>
+      <div className="row">
+        <div className="col-md-6">
+          <div className="card shadow-sm p-3">
+            <h5 className="card-title">Total Users</h5>
+            <h3>{userCount}</h3>
           </div>
         </div>
-
-        <div className="row">
-          <div className="col-lg-12">
-            <div className="card shadow mb-4">
-              <div className="card-header py-3">
-                <h6 className="m-0 font-weight-bold text-primary">
-                  User Management
-                </h6>
-              </div>
-              <div className="card-body">
-                <p>Manage all registered users and their roles.</p>
-                <Link to="/admin/users" className="btn btn-primary">
-                  Manage Users
-                </Link>
-              </div>
-            </div>
+        <div className="col-md-6">
+          <div className="card shadow-sm p-3">
+            <h5 className="card-title">Total Properties</h5>
+            <h3>{propertyCount}</h3>
           </div>
         </div>
       </div>
@@ -76,4 +63,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default AdminDashboard;

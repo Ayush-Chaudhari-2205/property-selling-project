@@ -23,7 +23,7 @@ const PropertySearch = () => {
 
   const fetchProperties = async () => {
     try {
-      const response = await axios.get(`${API}/property/all`, {
+      const response = await axios.get(`${API}/property/all-active`, {
         headers: { Authorization: `Bearer ${user.jwt}` },
       });
       setProperties(response.data.data);

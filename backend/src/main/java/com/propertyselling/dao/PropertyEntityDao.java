@@ -37,6 +37,8 @@ public interface PropertyEntityDao extends JpaRepository<Property,Long  >
     Long countByIsActiveTrue();
 
 
+
+
     @Query("SELECT p FROM Property p WHERE " +
             "(:type IS NULL OR p.propertyType = :type) " +
             "AND (:minPrice IS NULL OR p.price >= :minPrice) " +
