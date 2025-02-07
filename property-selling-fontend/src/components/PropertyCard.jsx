@@ -1,13 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import "../assets/css/PropertyCard.css"; // Ensure you have styling for the card
+import AuthContext from "../context/AuthContext";
 
 const PropertyCard = ({ property }) => {
+
+   const { user } = useContext(AuthContext);
+
+
   return (
     <div className="card property-card shadow-sm">
       {/* Property Image */}
       <img
-        src={property?.imageUrls?.length > 0 ? property.imageUrls[0] : "/assets/img/default-property.jpg"}
+        src={
+          property?.imageUrls?.length > 0
+            ? property.imageUrls[0]
+            : "/assets/img/default-property.jpg"
+        }
         className="card-img-top property-img"
         alt={property.name}
       />
@@ -20,14 +29,24 @@ const PropertyCard = ({ property }) => {
 
         {/* Property Features */}
         <div className="property-features">
-          <span>{property.bedrooms} Beds</span> | <span>{property.bathrooms} Baths</span> | <span>{property.area} sqft</span>
+          <span>{property.bedrooms} Beds</span> |{" "}
+          <span>{property.bathrooms} Baths</span> |{" "}
+          <span>{property.area} sqft</span>
         </div>
 
         {/* View Details Button */}
         <div className="d-flex justify-content-center mt-3">
-          <Link to={`/property/${property.id}`} className="btn btn-sm btn-outline-primary">
+          <Link
+            to={`/property/${property.id}`}
+            className="btn btn-sm btn-outline-primary"
+          >
             View Details
           </Link>
+          {user && user.role === "SELLER" && (
+          <Link to={`/property/update/${property.id}`} className="btn btn-warning btn-sm">
+            Update
+          </Link>
+        )}
         </div>
       </div>
     </div>

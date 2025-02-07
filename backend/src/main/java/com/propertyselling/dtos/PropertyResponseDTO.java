@@ -23,6 +23,7 @@ public class PropertyResponseDTO {
     private String propertyType;
     private String sellerName;
     private String sellerEmail;
+    private Boolean isActive;
     private List<String> imageUrls; // ✅ Avoids lazy loading issue
 
 }

@@ -29,6 +29,21 @@ const ManageProperties = () => {
     fetchProperties();
   }, []);
 
+  const handleTogglePropertyStatus = async (propertyId, isActive) => {
+    try {
+      await axios.put(
+        `${API}/property/status`,
+        { propertyId, adminId: user.user_id, isActive: !isActive },
+        { headers: { Authorization: `Bearer ${user.jwt}` } }
+      );
+      alert(`Property ${isActive ? "disabled" : "enabled"} successfully!`);
+      setProperties(properties.map(prop => prop.id === propertyId ? { ...prop, isActive: !isActive } : prop));
+    } catch (error) {
+      console.error("Error updating property status:", error);
+      alert("Failed to update property status");
+    }
+  };
+
   if (loading) return <div className="text-center mt-4">Loading properties...</div>;
 
   return (
@@ -52,9 +67,15 @@ const ManageProperties = () => {
                   <td>{property.propertyType}</td>
                   <td>{property.sellerName}</td>
                   <td>
-                    <Link to={`/property/${property.id}`} className="btn btn-info btn-sm">
+                    <Link to={`/property/${property.id}`} className="btn btn-info btn-sm me-2">
                       View Details
                     </Link>
+                    <button
+                      className={`btn btn-${property.isActive ? "danger" : "success"} btn-sm`}
+                      onClick={() => handleTogglePropertyStatus(property.id, property.isActive)}
+                    >
+                      {property.isActive ? "Disable" : "Enable"}
+                    </button>
                   </td>
                 </tr>
               ))

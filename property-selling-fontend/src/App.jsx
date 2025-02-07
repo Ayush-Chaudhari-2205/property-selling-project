@@ -20,6 +20,7 @@ import Wishlist from "./pages/Wishlist";
 import ManageUsers from "./pages/admin/ManageUsers";
 import ManageProperties from "./pages/admin/ManageProperties";
 import ManageInquiries from "./pages/seller/ManageInquiries";
+import UpdateProperty from "./pages/seller/UpdateProperty";
 
 const App = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -68,6 +69,7 @@ const App = () => {
         <Route path="/seller/property/:id" element={<PropertyDetail />} />
         <Route path="/seller/property/add" element={<AddProperty />} /> 
         <Route path="/seller/inquiries" element={<ManageInquiries />} />
+        <Route path="property/update/:id" element={<UpdateProperty />} />
       </Route>
 
       {/* Catch-All Route for Not Found */}
