@@ -43,9 +43,16 @@ const PropertyCard = ({ property }) => {
             View Details
           </Link>
           {user && user.role === "SELLER" && (
-          <Link to={`/property/update/${property.id}`} className="btn btn-warning btn-sm">
+            <>
+              <Link to={`/property/update/${property.id}`} className="btn btn-warning btn-sm">
             Update
           </Link>
+          <Link to={`/property/images/${property.id}`} className="btn btn-secondary btn-sm">
+              Images
+            </Link>
+            </>
+          
+          
         )}
         </div>
       </div>

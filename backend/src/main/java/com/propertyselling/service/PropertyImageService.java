@@ -9,7 +9,7 @@ import java.util.List;
 public interface PropertyImageService {
     ApiResponse<?> uploadPropertyImage(Long propertyId, Long sellerId, MultipartFile imageFile);
 
-    ApiResponse<List<PropertyImageResponseDTO>> getPropertyImages(Long propertyId);
+    ApiResponse<List<String>> getPropertyImages(Long propertyId);
 
     ApiResponse<?> deletePropertyImage(Long imageId, Long sellerId);
 }

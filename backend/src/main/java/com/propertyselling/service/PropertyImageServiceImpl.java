@@ -31,118 +31,80 @@ public class PropertyImageServiceImpl implements PropertyImageService {
     @Autowired
     private PropertyImageEntityDao propertyImageEntityDao;
 
-    private static final String IMAGE_DIRECTORY = "D:/property-images/";
+    private static final String UPLOAD_DIRECTORY = "D:/property-selling-project/uploads/property-images"; // ✅ Store absolute path
 
     @Override
-    public ApiResponse<?> uploadPropertyImage(Long propertyId, Long sellerId, MultipartFile imageFile) {
+    public ApiResponse<?> uploadPropertyImage(Long propertyId, Long sellerId, MultipartFile image) {
         Optional<Property> propertyOpt = propertyEntityDao.findById(propertyId);
 
-        if (propertyOpt.isEmpty() || !propertyOpt.get().isActive()) {
-            return new ApiResponse<>("Property not found or is inactive!", null);
+        if (propertyOpt.isEmpty() || !propertyOpt.get().getSeller().getId().equals(sellerId)) {
+            return new ApiResponse<>("Property not found or unauthorized!", null);
         }
 
         Property property = propertyOpt.get();
 
-        // ✅ Ensure the seller owns this property
-        if (!property.getSeller().getId().equals(sellerId)) {
-            return new ApiResponse<>("You are not authorized to upload images for this property!", null);
-        }
-
-        // ✅ Define fixed directory path (Modify as per your needs)
-        String fixedDirectoryPath = "D:/property-images/";
-
-        // ✅ Generate unique filename
-        String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
-        Path uploadPath = Paths.get(fixedDirectoryPath);
-
         try {
-            // ✅ Ensure directory exists
-            File directory = uploadPath.toFile();
-            if (!directory.exists()) {
-                boolean created = directory.mkdirs();
-                if (!created) {
-                    return new ApiResponse<>("Failed to create upload directory!", null);
-                }
+            // ✅ Ensure the upload directory exists
+            File uploadDir = new File(UPLOAD_DIRECTORY);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
             }
 
-            // ✅ Save file locally
-            File imageFilePath = new File(directory, fileName);
-            FileOutputStream outputStream = new FileOutputStream(imageFilePath);
-            outputStream.write(imageFile.getBytes());
-            outputStream.close();
+            // ✅ Generate a unique filename
+            String fileName = UUID.randomUUID() + "_" + image.getOriginalFilename();
+            Path filePath = Paths.get(UPLOAD_DIRECTORY, fileName);
+            image.transferTo(filePath.toFile()); // ✅ Save the file to absolute path
 
-            // ✅ Log file path
-            System.out.println("Image saved successfully at: " + imageFilePath.getAbsolutePath());
+            // ✅ Store the absolute file path in the database
+            String absolutePath = filePath.toAbsolutePath().toString(); // ✅ Get absolute path
 
-            // ✅ Store image URL in the database
-            String imageUrl = "/uploads/property-images/" + fileName;
             PropertyImage propertyImage = new PropertyImage();
             propertyImage.setProperty(property);
-            propertyImage.setImageUrl(imageUrl);
-
+            propertyImage.setImageUrl(absolutePath); // ✅ Save absolute path
             propertyImageEntityDao.save(propertyImage);
 
-            return new ApiResponse<>("Image uploaded successfully!", imageUrl);
+            return new ApiResponse<>("Image uploaded successfully!", absolutePath);
         } catch (IOException e) {
-            e.printStackTrace();
             return new ApiResponse<>("Error saving image file!", null);
         }
     }
 
     @Override
-    public ApiResponse<List<PropertyImageResponseDTO>> getPropertyImages(Long propertyId) {
-        Optional<Property> propertyOpt = propertyEntityDao.findById(propertyId);
-        if (propertyOpt.isEmpty() || !propertyOpt.get().isActive()) {
-            return new ApiResponse<>("Property not found or is inactive!", null);
-        }
-
+    public ApiResponse<List<String>> getPropertyImages(Long propertyId) {
         List<PropertyImage> images = propertyImageEntityDao.findByPropertyId(propertyId);
 
         if (images.isEmpty()) {
             return new ApiResponse<>("No images found for this property!", null);
         }
 
-        List<PropertyImageResponseDTO> imageDTOs = images.stream()
-                .map(image -> new PropertyImageResponseDTO(
-                        image.getId(),
-                        image.getProperty().getId(),
-                        image.getImageUrl()
-                ))
+        List<String> imagePaths = images.stream()
+                .map(PropertyImage::getImageUrl) // ✅ Returning absolute file paths
                 .collect(Collectors.toList());
 
-        return new ApiResponse<>("Property images retrieved successfully!", imageDTOs);
+        return new ApiResponse<>("Property images retrieved successfully!", imagePaths);
     }
 
     @Override
+    @Transactional
     public ApiResponse<?> deletePropertyImage(Long imageId, Long sellerId) {
         Optional<PropertyImage> imageOpt = propertyImageEntityDao.findById(imageId);
-        if (imageOpt.isEmpty()) {
-            return new ApiResponse<>("Image not found!", null);
+
+        if (imageOpt.isEmpty() || !imageOpt.get().getProperty().getSeller().getId().equals(sellerId)) {
+            return new ApiResponse<>("Image not found or unauthorized!", null);
         }
 
-        PropertyImage image = imageOpt.get();
-        Property property = image.getProperty();
+        PropertyImage propertyImage = imageOpt.get();
+        String filePath = propertyImage.getImageUrl(); // ✅ Get absolute file path
 
-        // ✅ Ensure the seller owns this property
-        if (!property.getSeller().getId().equals(sellerId)) {
-            return new ApiResponse<>("You are not authorized to delete this image!", null);
+        // ✅ Delete file from disk
+        File file = new File(filePath);
+        if (file.exists()) {
+            file.delete();
         }
 
-        // ✅ Construct the full image file path
-        String imageFileName = image.getImageUrl().replace("/uploads/property-images/", "");
-        File imageFile = new File(IMAGE_DIRECTORY, imageFileName);
+        // ✅ Delete image record from database
+        propertyImageEntityDao.delete(propertyImage);
 
-        // ✅ Delete the image file
-        if (imageFile.exists()) {
-            boolean deleted = imageFile.delete();
-            if (!deleted) {
-                return new ApiResponse<>("Failed to delete image file from the server!", null);
-            }
-        }
-
-        // ✅ Remove image from the database
-        propertyImageEntityDao.delete(image);
-
-        return new ApiResponse<>("Image deleted successfully!", null);
+        return new ApiResponse<>("Property image deleted successfully!", null);
     }
 }
