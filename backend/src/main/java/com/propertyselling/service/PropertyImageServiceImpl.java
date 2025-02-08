@@ -31,7 +31,7 @@ public class PropertyImageServiceImpl implements PropertyImageService {
     @Autowired
     private PropertyImageEntityDao propertyImageEntityDao;
 
-    private static final String UPLOAD_DIRECTORY = "D:/property-selling-project/uploads/property-images"; // ✅ Store absolute path
+    private static final String UPLOAD_DIRECTORY = "images/"; // ✅ Store absolute path
 
     @Override
     public ApiResponse<?> uploadPropertyImage(Long propertyId, Long sellerId, MultipartFile image) {
