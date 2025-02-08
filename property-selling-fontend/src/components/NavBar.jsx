@@ -6,6 +6,7 @@ import AuthContext from "../context/AuthContext";
 function NavBar() {
   const { user} = useContext(AuthContext);
   const isSeller = user?.role === "SELLER"; // Check if the user is a Seller
+  const isBuyer = user?.role === "BUYER"; // Check if the user is a Seller
 
   return (
     <nav className="navbar navbar-expand-lg fixed-top bg-body clean-navbar">
@@ -18,10 +19,7 @@ function NavBar() {
         <div className="collapse navbar-collapse" id="navcol-1">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item"><Link className="nav-link active" to="/">Home</Link></li>
-            <li className="nav-item"><Link className="nav-link" to="/features">Features</Link></li>
-            <li className="nav-item"><Link className="nav-link" to="/pricing">Pricing</Link></li>
-            <li className="nav-item"><Link className="nav-link" to="/about-us">About Us</Link></li>
-            <li className="nav-item"><Link className="nav-link" to="/contact-us">Contact Us</Link></li>
+
             <li className="nav-item"><Link className="nav-link" to="/properties">Find Properties</Link></li>
             <li className="nav-item"><Link className="nav-link" to="/wishlist">Wishlist</Link></li>
 
