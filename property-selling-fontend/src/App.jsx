@@ -57,12 +57,13 @@ const App = () => {
       <Route element={<PrivateRoute />}>
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
+          <Route path="/dashboard/admin/users" element={<ManageUsers />} />
+          <Route path="/dashboard/admin/properties" element={<ManageProperties />} />
         </Route>
         <Route path="/profile" element={<Profile />} />
       </Route>
 
-       <Route path="/admin/users" element={<ManageUsers />} />
-       <Route path="/admin/properties" element={<ManageProperties />} />
+       
 
       {/* Seller Routes - Accessible Only to Sellers */}
       <Route element={<PrivateRoute requiredRole="SELLER" />}>

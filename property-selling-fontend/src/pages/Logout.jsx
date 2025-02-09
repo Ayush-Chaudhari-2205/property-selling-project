@@ -4,12 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 const Logout = () => {
   const { logout } = useContext(AuthContext);
-  const navigate = useNavigate();
 
   useEffect(() => {
     logout();
-    navigate("/", { replace: true });
-  }, []);
+  }, [logout]);
 
   return <div>Logging out...</div>;
 };

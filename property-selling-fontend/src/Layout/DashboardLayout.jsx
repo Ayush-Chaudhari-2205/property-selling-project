@@ -15,13 +15,13 @@ function DashboardLayout() {
         </Link>
         <hr className="sidebar-divider" />
         <li className="nav-item">
-          <Link className="nav-link" to="/admin/users">
+          <Link className="nav-link" to="/dashboard/admin/users">
             <i className="fas fa-users"></i>
             <span>Manage Users</span>
           </Link>
         </li>
         <li className="nav-item">
-          <Link className="nav-link" to="/admin/properties">
+          <Link className="nav-link" to="/dashboard/admin/properties">
             <i className="fas fa-home"></i>
             <span>Manage Properties</span>
           </Link>

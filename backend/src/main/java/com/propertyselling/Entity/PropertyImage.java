@@ -1,9 +1,6 @@
 package com.propertyselling.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -13,7 +10,13 @@ import lombok.*;
 @Setter
 @ToString(callSuper = true)
 public class PropertyImage extends BaseEntity {
-    @Column(nullable = false)
+
+//    @Lob
+//    @Column(name = "image_url", nullable = false, columnDefinition = "LONGBLOB")
+//    private byte[] imageUrl; // URL or file path of the image
+
+
+    @Column(name = "image_url", nullable = false, length = 2500)
     private String imageUrl; // URL or file path of the image
 
     @ManyToOne

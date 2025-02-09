@@ -37,7 +37,10 @@ public class SecurityConfig {
 				.exceptionHandling(exception -> exception.authenticationEntryPoint(authEntry))
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/","/user/signup","/user/signin", "/v*/api-doc*/**", "/swagger-ui/**").permitAll()
+						.requestMatchers("/","/user/signup","/user/signin", "/v*/api-doc*/**", "/swagger-ui/**","/property-images/**").permitAll()
+						.requestMatchers("/property/image/images/**").permitAll()
+						.requestMatchers("/property/images/**").permitAll()
+
 						.requestMatchers(HttpMethod.OPTIONS).permitAll()
 						.requestMatchers("/property/add").hasAuthority("ROLE_SELLER")
 						.requestMatchers("/products/purchase").hasRole("CUSTOMER")

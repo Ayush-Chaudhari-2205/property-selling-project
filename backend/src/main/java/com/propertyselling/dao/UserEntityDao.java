@@ -16,4 +16,7 @@ public interface UserEntityDao extends JpaRepository<User,Long> {
 
     // ✅ Fetch active users who are not Admins
     List<User> findByIsActiveFalseAndUserTypeNot(UserType userType);
+
+    // Fetch all non-admin users (active and inactive)
+    List<User> findByUserTypeNot(UserType userType);
 }

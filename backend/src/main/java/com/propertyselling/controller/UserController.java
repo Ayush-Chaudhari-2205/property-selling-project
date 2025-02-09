@@ -9,6 +9,7 @@ import com.propertyselling.service.UserService;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -60,6 +61,12 @@ public class UserController {
 
             CustomUserDetails userDetails = (CustomUserDetails)verifiedAuth.getPrincipal();
             User user = userDetails.getUser();
+
+            // Check if the user account is active
+            if (user.isActive()) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                        .body(new ApiResponse<>("User account is inactive. Please contact support.", null));
+            }
 
              SigninResponseDTO localUser = new SigninResponseDTO();
 
@@ -119,8 +126,13 @@ public class UserController {
         return ResponseEntity.ok(userService.countUsersExcludingAdmins());
     }
 
-    @GetMapping("/active-non-admin-users")
+    @GetMapping("/non-admin-users")
     public ResponseEntity<?> getAllNonAdminUsers() {
         return ResponseEntity.ok(userService.getAllNonAdminUsers());
+    }
+
+    @PutMapping("/status")
+    public ResponseEntity<?> updateUserStatus(@RequestBody UserStatusUpdateDTO dto) {
+        return ResponseEntity.ok(userService.updateUserStatus(dto));
     }
 }

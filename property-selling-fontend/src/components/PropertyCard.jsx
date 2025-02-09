@@ -5,16 +5,23 @@ import AuthContext from "../context/AuthContext";
 
 const PropertyCard = ({ property }) => {
 
+console.log(property);
+
    const { user } = useContext(AuthContext);
 
+// const blob = new Blob([byteArray], { type: "image/png" });
+//     console.log(blob)
+//     const imageUrl = URL.createObjectURL(blob);
+            const imageSrc = `data:image/jpeg;base64,${property?.imageUrls[0]}`;
 
   return (
     <div className="card property-card shadow-sm">
       {/* Property Image */}
+
       <img
         src={
           property?.imageUrls?.length > 0
-            ? property.imageUrls[0]
+            ? imageSrc
             : "/assets/img/default-property.jpg"
         }
         className="card-img-top property-img"
