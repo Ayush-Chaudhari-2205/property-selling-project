@@ -242,7 +242,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ApiResponse<List<UserProfileDTO>> getAllNonAdminUsers() {
-        List<User> nonAdminUsers = userEntityDao.findByIsActiveFalseAndUserTypeNot(UserType.ADMIN);
+        List<User> nonAdminUsers = userEntityDao.findByUserTypeNot(UserType.ADMIN);
 
         if (nonAdminUsers.isEmpty()) {
             return new ApiResponse<>("No active non-admin users found!", null);
@@ -253,6 +253,28 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
 
         return new ApiResponse<>("Active non-admin users retrieved successfully!", userDTOList);
+    }
+
+    @Override
+    public ApiResponse<?> updateUserStatus(UserStatusUpdateDTO dto) {
+        // Verify that the admin exists and is an admin
+        Optional<User> adminOpt = userEntityDao.findById(dto.getAdminId());
+        if (adminOpt.isEmpty() || adminOpt.get().getUserType() != UserType.ADMIN) {
+            return new ApiResponse<>("Unauthorized! Only admins can update user status.", null);
+        }
+
+        // Fetch the target user to update
+        Optional<User> userOpt = userEntityDao.findById(dto.getUserId());
+        if (userOpt.isEmpty()) {
+            return new ApiResponse<>("User not found!", null);
+        }
+
+        User user = userOpt.get();
+        user.setActive(dto.getIsActive());
+        userEntityDao.save(user);
+
+        String status = dto.getIsActive() ? "activated" : "deactivated";
+        return new ApiResponse<>("User has been " + status + " successfully!", null);
     }
 
 

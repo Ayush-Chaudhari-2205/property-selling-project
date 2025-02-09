@@ -25,4 +25,6 @@ public interface UserService {
     ApiResponse<?> updateUserByEmail(String email, UserUpdateDTO dto);
 
     ApiResponse<List<UserProfileDTO>> getAllNonAdminUsers();
+
+    ApiResponse<?> updateUserStatus(UserStatusUpdateDTO dto);
 }

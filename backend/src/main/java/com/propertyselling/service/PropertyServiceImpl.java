@@ -4,12 +4,15 @@ import com.propertyselling.Entity.*;
 import com.propertyselling.dao.PropertyEntityDao;
 import com.propertyselling.dao.UserEntityDao;
 import com.propertyselling.dtos.*;
+import org.apache.commons.io.FileUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.propertyselling.Entity.Property_Type;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,6 +30,9 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    // Constant for the base URL used to build the image URL for each property image.
+    private static final String IMAGE_BASE_URL = "http://localhost:8000/property-images/images/";
 
     @Override
     public ApiResponse<Property> addProperty(PropertyRequestDTO dto) {
@@ -69,9 +75,19 @@ public class PropertyServiceImpl implements PropertyService {
 
         Property property = propertyOpt.get();
 
-        // ✅ Extract image URLs to avoid lazy loading issue
-        List<String> imageUrls = property.getImages().stream()
-                .map(PropertyImage::getImageUrl)
+        // Build image URLs dynamically
+//        List<String> imageUrls = property.getImages().stream()
+//                .map(image -> IMAGE_BASE_URL + image.getId())
+//                .collect(Collectors.toList());
+
+        List<byte[]> imageUrls = property.getImages().stream()
+                .map(image -> {
+                    try {
+                        return FileUtils.readFileToByteArray(new File(image.getImageUrl()));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .collect(Collectors.toList());
 
         // ✅ Map Property entity to PropertyResponseDTO using ModelMapper
@@ -100,10 +116,25 @@ public class PropertyServiceImpl implements PropertyService {
                     dto.setSellerEmail(property.getSeller().getEmail());
                     dto.setIsActive(property.isActive());
 
-                    // ✅ Extract image URLs to avoid lazy loading issues
-                    List<String> imageUrls = property.getImages().stream()
-                            .map(PropertyImage::getImageUrl)
+//                     Build image URLs dynamically
+//                    List<String> imageUrls = property.getImages().stream()
+//                            .map(image -> IMAGE_BASE_URL + image.getId())
+//                            .collect(Collectors.toList());
+
+//                    List<String> imageUrls = property.getImages().stream()
+//                            .map(image -> image.getImageUrl())
+//                            .collect(Collectors.toList());
+
+                    List<byte[]> imageUrls = property.getImages().stream()
+                            .map(image -> {
+                                try {
+                                    return FileUtils.readFileToByteArray(new File(image.getImageUrl()));
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            })
                             .collect(Collectors.toList());
+
                     dto.setImageUrls(imageUrls);
 
                     return dto;
@@ -157,10 +188,20 @@ public class PropertyServiceImpl implements PropertyService {
             responseDTO.setSellerEmail(property.getSeller().getEmail());
         }
 
-        // ✅ Fetch and map images (to prevent lazy loading issues)
-        List<String> imageUrls = property.getImages().stream()
-                .map(PropertyImage::getImageUrl)
-                .toList();
+        // Build image URLs dynamically
+//        List<String> imageUrls = property.getImages().stream()
+//                .map(image -> IMAGE_BASE_URL + image.getId())
+//                .collect(Collectors.toList());
+
+        List<byte[]> imageUrls = property.getImages().stream()
+                .map(image -> {
+                    try {
+                        return FileUtils.readFileToByteArray(new File(image.getImageUrl()));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .collect(Collectors.toList());
         responseDTO.setImageUrls(imageUrls);
 
         return new ApiResponse<>("Property updated successfully!", responseDTO);
@@ -209,9 +250,19 @@ public class PropertyServiceImpl implements PropertyService {
                     dto.setSellerName(property.getSeller().getFullName());
                     dto.setSellerEmail(property.getSeller().getEmail());
 
-                    // ✅ Extract image URLs to avoid lazy loading issues
-                    List<String> imageUrls = property.getImages().stream()
-                            .map(PropertyImage::getImageUrl)
+                    // Build image URLs dynamically
+//                    List<String> imageUrls = property.getImages().stream()
+//                            .map(image -> IMAGE_BASE_URL + image.getId())
+//                            .collect(Collectors.toList());
+
+                    List<byte[]> imageUrls = property.getImages().stream()
+                            .map(image -> {
+                                try {
+                                    return FileUtils.readFileToByteArray(new File(image.getImageUrl()));
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            })
                             .collect(Collectors.toList());
                     dto.setImageUrls(imageUrls);
 
@@ -243,9 +294,19 @@ public class PropertyServiceImpl implements PropertyService {
                     dto.setSellerName(property.getSeller().getFullName());
                     dto.setSellerEmail(property.getSeller().getEmail());
 
-                    // ✅ Extract image URLs to avoid lazy loading issues
-                    List<String> imageUrls = property.getImages().stream()
-                            .map(PropertyImage::getImageUrl)
+                    // Build image URLs dynamically
+//                    List<String> imageUrls = property.getImages().stream()
+//                            .map(image -> IMAGE_BASE_URL + image.getId())
+//                            .collect(Collectors.toList());
+
+                    List<byte[]> imageUrls = property.getImages().stream()
+                            .map(image -> {
+                                try {
+                                    return FileUtils.readFileToByteArray(new File(image.getImageUrl()));
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            })
                             .collect(Collectors.toList());
                     dto.setImageUrls(imageUrls);
 
@@ -274,9 +335,20 @@ public class PropertyServiceImpl implements PropertyService {
                     dto.setSellerName(property.getSeller().getFullName());
                     dto.setSellerEmail(property.getSeller().getEmail());
 
-                    // ✅ Extract image URLs to avoid lazy loading issues
-                    List<String> imageUrls = property.getImages().stream()
-                            .map(PropertyImage::getImageUrl)
+                    // Build image URLs dynamically
+//                    List<String> imageUrls = property.getImages().stream()
+//                            .map(image -> IMAGE_BASE_URL + image.getId())
+//                            .collect(Collectors.toList());
+
+
+                    List<byte[]> imageUrls = property.getImages().stream()
+                            .map(image -> {
+                                try {
+                                    return FileUtils.readFileToByteArray(new File(image.getImageUrl()));
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            })
                             .collect(Collectors.toList());
                     dto.setImageUrls(imageUrls);
 
@@ -310,9 +382,19 @@ public class PropertyServiceImpl implements PropertyService {
                     dto.setSellerName(property.getSeller().getFullName());
                     dto.setSellerEmail(property.getSeller().getEmail());
 
-                    // ✅ Extract image URLs to avoid lazy loading issues
-                    List<String> imageUrls = property.getImages().stream()
-                            .map(PropertyImage::getImageUrl)
+                    // Build image URLs dynamically
+//                    List<String> imageUrls = property.getImages().stream()
+//                            .map(image -> IMAGE_BASE_URL + image.getId())
+//                            .collect(Collectors.toList());
+
+                    List<byte[]> imageUrls = property.getImages().stream()
+                            .map(image -> {
+                                try {
+                                    return FileUtils.readFileToByteArray(new File(image.getImageUrl()));
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            })
                             .collect(Collectors.toList());
                     dto.setImageUrls(imageUrls);
 
@@ -337,9 +419,19 @@ public class PropertyServiceImpl implements PropertyService {
                     dto.setSellerName(property.getSeller().getFullName());
                     dto.setSellerEmail(property.getSeller().getEmail());
 
-                    // ✅ Extract image URLs to avoid lazy loading issues
-                    List<String> imageUrls = property.getImages().stream()
-                            .map(PropertyImage::getImageUrl)
+                    // Build image URLs dynamically
+//                    List<String> imageUrls = property.getImages().stream()
+//                            .map(image -> IMAGE_BASE_URL + image.getId())
+//                            .collect(Collectors.toList());
+
+                    List<byte[]> imageUrls = property.getImages().stream()
+                            .map(image -> {
+                                try {
+                                    return FileUtils.readFileToByteArray(new File(image.getImageUrl()));
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            })
                             .collect(Collectors.toList());
                     dto.setImageUrls(imageUrls);
 
@@ -390,9 +482,19 @@ public class PropertyServiceImpl implements PropertyService {
                     dto.setSellerName(property.getSeller().getFullName());
                     dto.setSellerEmail(property.getSeller().getEmail());
 
-                    // ✅ Extract image URLs to avoid lazy loading issues
-                    List<String> imageUrls = property.getImages().stream()
-                            .map(PropertyImage::getImageUrl)
+                    // Build image URLs dynamically
+//                    List<String> imageUrls = property.getImages().stream()
+//                            .map(image -> IMAGE_BASE_URL + image.getId())
+//                            .collect(Collectors.toList());
+
+                    List<byte[]> imageUrls = property.getImages().stream()
+                            .map(image -> {
+                                try {
+                                    return FileUtils.readFileToByteArray(new File(image.getImageUrl()));
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            })
                             .collect(Collectors.toList());
                     dto.setImageUrls(imageUrls);
 
@@ -438,9 +540,19 @@ public class PropertyServiceImpl implements PropertyService {
                     dto.setSellerName(property.getSeller().getFullName());
                     dto.setSellerEmail(property.getSeller().getEmail());
 
-                    // ✅ Extract image URLs to avoid lazy loading issues
-                    List<String> imageUrls = property.getImages().stream()
-                            .map(PropertyImage::getImageUrl)
+                    // Build image URLs dynamically
+//                    List<String> imageUrls = property.getImages().stream()
+//                            .map(image -> IMAGE_BASE_URL + image.getId())
+//                            .collect(Collectors.toList());
+
+                    List<byte[]> imageUrls = property.getImages().stream()
+                            .map(image -> {
+                                try {
+                                    return FileUtils.readFileToByteArray(new File(image.getImageUrl()));
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            })
                             .collect(Collectors.toList());
                     dto.setImageUrls(imageUrls);
 

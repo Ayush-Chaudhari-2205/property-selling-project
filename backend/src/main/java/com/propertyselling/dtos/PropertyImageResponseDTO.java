@@ -12,4 +12,5 @@ public class PropertyImageResponseDTO {
     private Long imageId;
     private Long propertyId;
     private String imageUrl;
+    private byte[] image;
 }

@@ -127,9 +127,12 @@ const PropertyDetail = () => {
                 <div className="col-md-6">
                   <div className="gallery">
                     {property.imageUrls?.length > 0 ? (
-                      property.imageUrls.map((img, index) => (
-                        <img key={index} className="img-fluid d-block small-preview" src={img} alt="Property" />
-                      ))
+                      property.imageUrls.map((img, index) => {
+                                    const imageSrc = `data:image/jpeg;base64,${img}`;
+                        return  <img key={index} className="img-fluid d-block small-preview" src={imageSrc} alt="Property" />
+                      }
+
+                      )
                     ) : (
                       <img className="img-fluid d-block small-preview" src="/assets/img/default-property.jpg" alt="Default Property" />
                     )}
