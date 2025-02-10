@@ -44,39 +44,51 @@ const App = () => {
       <Route path="/" element={<RootLayout />}>
         <Route index element={<Home />} />
         <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
-        <Route path="/signup" element={user ? <Navigate to="/" replace /> : <Signup />} />
-        <Route path="/property/:id" element={<PropertyDetail />} /> 
+        <Route
+          path="/login"
+          element={user ? <Navigate to="/" replace /> : <Login />}
+        />
+        <Route
+          path="/signup"
+          element={user ? <Navigate to="/" replace /> : <Signup />}
+        />
+        <Route path="/property/:id" element={<PropertyDetail />} />
         <Route path="/properties" element={<PropertySearch />} />
-        <Route path="/logout" element={user ? <Navigate to="/" replace /> : <Logout />} />
+        <Route
+          path="/logout"
+          element={user ? <Navigate to="/" replace /> : <Logout />}
+        />
         <Route path="/wishlist" element={<Wishlist />} />
 
-      </Route>
-
-      {/* Private Routes */}
-      <Route element={<PrivateRoute />}>
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="/dashboard/admin/users" element={<ManageUsers />} />
-          <Route path="/dashboard/admin/properties" element={<ManageProperties />} />
+        {/* Private Routes */}
+        <Route element={<PrivateRoute />}>
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="/dashboard/admin/users" element={<ManageUsers />} />
+            <Route
+              path="/dashboard/admin/properties"
+              element={<ManageProperties />}
+            />
+          </Route>
+          <Route path="/profile" element={<Profile />} />
         </Route>
-        <Route path="/profile" element={<Profile />} />
+
+        {/* Seller Routes - Accessible Only to Sellers */}
+        <Route element={<PrivateRoute requiredRole="SELLER" />}>
+          <Route path="/seller/properties" element={<ListProperties />} />
+          <Route path="/seller/property/:id" element={<PropertyDetail />} />
+          <Route path="/seller/property/add" element={<AddProperty />} />
+          <Route path="/seller/inquiries" element={<ManageInquiries />} />
+          <Route path="property/update/:id" element={<UpdateProperty />} />
+          <Route
+            path="property/images/:id"
+            element={<ManagePropertyImages />}
+          />
+        </Route>
+
+        {/* Catch-All Route for Not Found */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
-
-       
-
-      {/* Seller Routes - Accessible Only to Sellers */}
-      <Route element={<PrivateRoute requiredRole="SELLER" />}>
-        <Route path="/seller/properties" element={<ListProperties />} />
-        <Route path="/seller/property/:id" element={<PropertyDetail />} />
-        <Route path="/seller/property/add" element={<AddProperty />} /> 
-        <Route path="/seller/inquiries" element={<ManageInquiries />} />
-        <Route path="property/update/:id" element={<UpdateProperty />} />
-        <Route path="property/images/:id" element={<ManagePropertyImages />} />
-      </Route>
-
-      {/* Catch-All Route for Not Found */}
-      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

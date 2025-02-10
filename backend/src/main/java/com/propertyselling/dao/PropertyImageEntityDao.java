@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PropertyImageEntityDao extends JpaRepository<PropertyImage, Long> {
 
-    // ✅ Fetch images by property ID
+    //  Fetch images by property ID
     List<PropertyImage> findByPropertyId(Long propertyId);
 
 }

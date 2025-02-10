@@ -30,10 +30,10 @@ public interface PropertyEntityDao extends JpaRepository<Property,Long  >
 
     List<Property> findByFurnishedAndIsActiveTrue(boolean furnished);
 
-    // ✅ Fetch properties owned by a specific seller
+    //  Fetch properties owned by a specific seller
     List<Property> findBySellerId(Long sellerId);
 
-    // ✅ Count total active properties
+    //  Count total active properties
     Long countByIsActiveTrue();
 
 

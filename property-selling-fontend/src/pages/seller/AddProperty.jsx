@@ -3,8 +3,10 @@ import React, { useState, useContext } from "react";
 import axios from "axios";
 import AuthContext from "../../context/AuthContext";
 import { API } from "../../API";
+import { useNavigate  } from "react-router-dom";
 
 const AddProperty = () => {
+  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     name: "",
@@ -40,6 +42,7 @@ const AddProperty = () => {
         headers: { Authorization: `Bearer ${user.jwt}` },
       });
       alert("Property added successfully!");
+      navigate("/seller/properties");
     } catch (error) {
       console.error("Error adding property:", error);
     }

@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface WishlistEntityDao extends JpaRepository<Wishlist, Long> {
 
-    // ✅ Check if a property is already in the buyer's wishlist
+    //  Check if a property is already in the buyer's wishlist
     boolean existsByBuyerIdAndPropertyId(Long buyerId, Long propertyId);
 
     List<Wishlist> findByBuyerId(Long buyerId);

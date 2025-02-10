@@ -43,7 +43,7 @@ public class ReviewServiceImpl implements ReviewService {
             return new ApiResponse<>("Property not found or is inactive!", null);
         }
 
-        // ✅ Check if the buyer has already reviewed this property
+        //  Check if the buyer has already reviewed this property
         if (reviewEntityDao.existsByBuyerIdAndPropertyId(dto.getBuyerId(), dto.getPropertyId())) {
             return new ApiResponse<>("You have already reviewed this property!", null);
         }

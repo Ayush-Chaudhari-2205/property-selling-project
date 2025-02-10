@@ -90,10 +90,10 @@ public class PropertyServiceImpl implements PropertyService {
                 })
                 .collect(Collectors.toList());
 
-        // ✅ Map Property entity to PropertyResponseDTO using ModelMapper
+        //  Map Property entity to PropertyResponseDTO using ModelMapper
         PropertyResponseDTO dto = modelMapper.map(property, PropertyResponseDTO.class);
 
-        // ✅ Set additional fields manually
+        //  Set additional fields manually
         dto.setSellerName(property.getSeller().getFullName());
         dto.setSellerEmail(property.getSeller().getEmail());
         dto.setImageUrls(imageUrls);
@@ -153,22 +153,22 @@ public class PropertyServiceImpl implements PropertyService {
 
         Property property = propertyOpt.get();
 
-        // ✅ Validate that the seller updating the property is the owner
+        //  Validate that the seller updating the property is the owner
         if (!property.getSeller().getId().equals(dto.getSellerId())) {
             return new ApiResponse<>("You are not authorized to update this property!", null);
         }
 
-        // ✅ Map updates from DTO to entity
+        //  Map updates from DTO to entity
         modelMapper.map(dto, property);
 
-        // ✅ Convert String to Enum for PropertyType
+        //  Convert String to Enum for PropertyType
         try {
             property.setPropertyType(Property_Type.valueOf(dto.getPropertyType().toUpperCase()));
         } catch (IllegalArgumentException e) {
             return new ApiResponse<>("Invalid property type!", null);
         }
 
-        // ✅ Update Address
+        //  Update Address
         Address address = property.getAddress();
         address.setAddressLine(dto.getAddressLine());
         address.setCity(dto.getCity());
@@ -176,13 +176,13 @@ public class PropertyServiceImpl implements PropertyService {
         address.setCountry(dto.getCountry());
         address.setPinCode(dto.getPinCode());
 
-        // ✅ Save the updated property
+        //  Save the updated property
         propertyEntityDao.save(property);
 
-        // ✅ Convert to PropertyResponseDTO to avoid lazy loading issue
+        //  Convert to PropertyResponseDTO to avoid lazy loading issue
         PropertyResponseDTO responseDTO = modelMapper.map(property, PropertyResponseDTO.class);
 
-        // ✅ Manually set the seller's information to avoid lazy loading issues
+        //  Manually set the seller's information to avoid lazy loading issues
         if (property.getSeller() != null) {
             responseDTO.setSellerName(property.getSeller().getFullName());
             responseDTO.setSellerEmail(property.getSeller().getEmail());
@@ -224,12 +224,12 @@ public class PropertyServiceImpl implements PropertyService {
 
         User user = userOpt.get();
 
-        // ✅ Validate that the seller deleting the property is the owner OR an admin
+        //  Validate that the seller deleting the property is the owner OR an admin
         if (!property.getSeller().getId().equals(sellerId) && user.getUserType() != UserType.ADMIN) {
             return new ApiResponse<>("You are not authorized to delete this property!", null);
         }
 
-        // ✅ Soft delete by setting isActive = false
+        //  Soft delete by setting isActive = false
         property.setActive(false);
         propertyEntityDao.save(property);
 
@@ -274,7 +274,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public ApiResponse<List<PropertyResponseDTO>> filterPropertiesByType(String propertyType) {
-        // ✅ Validate the property type before querying
+        //  Validate the property type before querying
         Property_Type type;
         try {
             type = Property_Type.valueOf(propertyType.toUpperCase());
@@ -318,7 +318,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public ApiResponse<List<PropertyResponseDTO>> filterPropertiesByPriceRange(Double minPrice, Double maxPrice) {
-        // ✅ Validate the price range
+        //  Validate the price range
         if (minPrice == null || maxPrice == null || minPrice < 0 || maxPrice < 0 || minPrice > maxPrice) {
             return new ApiResponse<>("Invalid price range! Ensure minPrice is less than maxPrice and values are non-negative.", null);
         }
@@ -528,7 +528,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public ApiResponse<List<PropertyResponseDTO>> getAllActiveProperties() {
-        List<Property> properties = propertyEntityDao.findAllActiveProperties(); // ✅ Fetch only active properties
+        List<Property> properties = propertyEntityDao.findAllActiveProperties(); //  Fetch only active properties
 
         if (properties.isEmpty()) {
             return new ApiResponse<>("No active properties found!", null);

@@ -7,7 +7,7 @@ const RootLayout = () => {
   return (
     <>
       <NavBar />
-      <div className="py-5">
+      <div style={{ paddingTop: "80px", paddingBottom: "20px" }}>
         <Outlet />
       </div>
       <Footer />
