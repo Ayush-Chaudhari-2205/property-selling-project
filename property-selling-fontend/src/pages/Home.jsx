@@ -1,6 +1,7 @@
 // src/pages/Home.jsx
 import React from "react";
 import { Link } from "react-router-dom";
+import bgImage from "../assets/property-hero-image.jpg"
 
 const Home = () => {
   return (
@@ -8,40 +9,49 @@ const Home = () => {
       <section
         className="clean-block clean-hero"
         style={{
-          backgroundImage: "url('/img/tech/image4.jpg')",
-          color: "rgba(9, 162, 255, 0.85)",
+          backgroundImage: `url(${bgImage})`, // Ensure you have a proper image in this path
+          color: "rgba(255, 255, 255, 0.3)",
+          backgroundSize : "cover",
+          backgroundPosition : "center",
+          minHeight : "70vh"
         }}
       >
         <div className="text">
-          <h2>Lorem ipsum dolor sit amet.</h2>
+          <h2>Welcome to Radiant Properties</h2>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.
+            Discover your dream home with our exclusive listings and expert guidance.
+            Experience a new standard in property buying and selling.
           </p>
-          <button className="btn btn-outline-light btn-lg" type="button">
-            Learn More
-          </button>
+          <Link to="/properties" className="btn btn-outline-light btn-lg">
+            Browse Listings
+          </Link>
         </div>
       </section>
       <section className="clean-block clean-info dark">
         <div className="container">
           <div className="block-heading">
-            <h2 className="text-info">Info</h2>
+            <h2 className="text-info">About Us</h2>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.
+              At Radiant Properties, we connect you with the finest properties on the market.
+              Our dedicated team ensures a smooth and personalized experience for every client.
             </p>
           </div>
           <div className="row align-items-center">
             <div className="col-md-6">
-              <img className="img-thumbnail" src="/assets/img/scenery/image5.jpg" alt="Scenery" />
+              <img 
+                className="img-thumbnail" 
+                src="/assets/img/properties/house_exterior.jpg" 
+                alt="Beautiful Property" 
+              />
             </div>
             <div className="col-md-6">
-              <h3>Lorem impsum dolor sit amet</h3>
+              <h3>Your Perfect Home Awaits</h3>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Whether you're looking to buy, sell, or invest, Radiant Properties offers a curated selection of premium homes and commercial spaces tailored to your needs.
               </p>
-              <button className="btn btn-outline-primary btn-lg" type="button">
-                Join Now
-              </button>
+              <Link to="/contact" className="btn btn-outline-primary btn-lg">
+                Contact Us
+              </Link>
             </div>
           </div>
         </div>
@@ -49,24 +59,24 @@ const Home = () => {
       <section className="clean-block features">
         <div className="container">
           <div className="block-heading">
-            <h2 className="text-info">Features</h2>
+            <h2 className="text-info">Why Choose Us</h2>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.
+              Our commitment to excellence sets us apart in the property market. Discover the benefits of partnering with Radiant Properties.
             </p>
           </div>
           <div className="row justify-content-center">
             <div className="col-md-5 feature-box">
-              <i className="icon-star icon"></i>
-              <h4>Bootstrap 5</h4>
+              <i className="icon-home icon"></i>
+              <h4>Expert Guidance</h4>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.
+                Benefit from years of experience and personalized support from our professional agents.
               </p>
             </div>
             <div className="col-md-5 feature-box">
-              <i className="icon-pencil icon"></i>
-              <h4>Customizable</h4>
+              <i className="icon-list icon"></i>
+              <h4>Wide Range of Listings</h4>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc quam urna, dignissim nec auctor in, mattis vitae leo.
+                Explore an extensive collection of residential and commercial properties tailored to your lifestyle.
               </p>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import AuthContext from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API } from "../API";
 
@@ -50,9 +50,13 @@ const Login = () => {
                 onChange={handleChange} 
                 required 
               />
+              <div className="mt-3">
+            <p>Don't have an account? <Link to="/signup">Sign Up</Link></p>
+          </div>
             </div>
             <button className="btn btn-primary" type="submit">Log In</button>
           </form>
+          
         </div>
       </section>
     </main>

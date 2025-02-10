@@ -100,7 +100,7 @@ public class    PropertyController {
             @RequestParam(required = false) String state,
             @RequestParam(required = false) Boolean furnished) {
 
-        // ✅ Convert empty strings to null
+        //  Convert empty strings to null
         type = (type != null && !type.trim().isEmpty()) ? type : null;
         city = (city != null && !city.trim().isEmpty()) ? city : null;
         state = (state != null && !state.trim().isEmpty()) ? state : null;

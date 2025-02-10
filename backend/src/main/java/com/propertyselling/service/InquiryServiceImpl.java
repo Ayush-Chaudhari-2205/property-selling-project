@@ -67,7 +67,7 @@ public class InquiryServiceImpl implements InquiryService {
 
         Property property = propertyOpt.get();
 
-        // ✅ Ensure the seller owns this property
+        //  Ensure the seller owns this property
         if (!property.getSeller().getId().equals(sellerId)) {
             return new ApiResponse<>("You are not authorized to view inquiries on this property!", null);
         }
@@ -104,12 +104,12 @@ public class InquiryServiceImpl implements InquiryService {
         Inquiry inquiry = inquiryOpt.get();
         Property property = inquiry.getProperty();
 
-        // ✅ Ensure the seller owns this property
+        //  Ensure the seller owns this property
         if (!property.getSeller().getId().equals(dto.getSellerId())) {
             return new ApiResponse<>("You are not authorized to respond to this inquiry!", null);
         }
 
-        // ✅ Update inquiry status
+        //  Update inquiry status
         inquiry.setResponded(dto.getResponded());
         inquiryEntityDao.save(inquiry);
 
@@ -127,14 +127,14 @@ public class InquiryServiceImpl implements InquiryService {
         List<BuyerInquiryDTO> inquiryDTOList = inquiries.stream()
                 .map(inquiry -> {
                     BuyerInquiryDTO dto = new BuyerInquiryDTO();
-                    dto.setInquiryId(inquiry.getId()); // ✅ Ensure `inquiryId` is set
+                    dto.setInquiryId(inquiry.getId()); //  Ensure `inquiryId` is set
                     dto.setPropertyId(inquiry.getProperty().getId());
                     dto.setPropertyName(inquiry.getProperty().getName());
                     dto.setBuyerName(inquiry.getBuyer().getFullName());
                     dto.setBuyerEmail(inquiry.getBuyer().getEmail());
                     dto.setMessage(inquiry.getMessage());
                     dto.setResponded(inquiry.isResponded());
-                    dto.setCreatedAt(inquiry.getCreatedOn()); // ✅ Ensure `createdAt` is set
+                    dto.setCreatedAt(inquiry.getCreatedOn()); //  Ensure `createdAt` is set
                     return dto;
                 }).collect(Collectors.toList());
 

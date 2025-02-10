@@ -43,7 +43,7 @@ public class WishlistServiceImpl implements WishlistService {
             return new ApiResponse<>("Property not found or is inactive!", null);
         }
 
-        // ✅ Check if the property is already in the wishlist
+        //  Check if the property is already in the wishlist
         if (wishlistEntityDao.existsByBuyerIdAndPropertyId(dto.getBuyerId(), dto.getPropertyId())) {
             return new ApiResponse<>("Property is already in the wishlist!", null);
         }

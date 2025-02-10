@@ -60,33 +60,33 @@ public class SecurityConfig {
 //				.exceptionHandling(exception -> exception.authenticationEntryPoint(authEntry))
 //				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 //				.authorizeHttpRequests(auth -> auth
-//						// ✅ Public Endpoints (Accessible Without Authentication)
+//						//  Public Endpoints (Accessible Without Authentication)
 //						.requestMatchers("/", "/user/signup", "/user/signin", "/v*/api-doc*/**", "/swagger-ui/**").permitAll()
 //						.requestMatchers("/property/all", "/property/{id}", "/review/property/{id}").permitAll()
 //
-//						// ✅ Buyer Access
+//						//  Buyer Access
 //						.requestMatchers("/wishlist/**", "/inquiry/submit", "/review/add").hasAuthority("ROLE_BUYER")
 //
-//						// ✅ Seller Access
+//						//  Seller Access
 //						.requestMatchers("/property/add", "/property/update/**", "/property/delete/**").hasAuthority("ROLE_SELLER")
 //						.requestMatchers("/property/image/upload/**", "/property/image/delete/**").hasAuthority("ROLE_SELLER")
 //						.requestMatchers("/inquiry/property/**", "/inquiry/respond").hasAuthority("ROLE_SELLER")
 //
-//						// ✅ Admin Access
+//						//  Admin Access
 //						.requestMatchers("/admin/**", "/property/status", "/property/delete/**").hasAuthority("ROLE_ADMIN")
 //						.requestMatchers("/user/active-users", "/user/non-admin-users").hasAuthority("ROLE_ADMIN")
 //
-//						// ✅ Secure Image Upload & Retrieval
+//						//  Secure Image Upload & Retrieval
 //						.requestMatchers("/property/image/{propertyId}").authenticated()
 //						.requestMatchers("/property/image/delete/{imageId}/seller/{sellerId}").hasAuthority("ROLE_SELLER")
 //
-//						// ✅ Inquiry Management
+//						//  Inquiry Management
 //						.requestMatchers("/inquiry/seller/{sellerId}").hasAuthority("ROLE_SELLER")
 //
-//						// ✅ Property Management (Filtering & Searching)
+//						//  Property Management (Filtering & Searching)
 //						.requestMatchers("/property/filter", "/property/search").authenticated()
 //
-//						// ✅ Secure All Other Requests
+//						//  Secure All Other Requests
 //						.anyRequest().authenticated()
 //				)
 //				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
