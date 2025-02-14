@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API } from "../API";
 
@@ -44,7 +44,9 @@ export const AuthProvider = ({ children }) => {
     console.log("Logging out...");
     localStorage.removeItem("user");
     setUser(null);
-    navigate("/");
+//    redirect("/");
+
+
   };
 
   return <AuthContext.Provider value={{ user, setUser, login, logout }}>{children}</AuthContext.Provider>;

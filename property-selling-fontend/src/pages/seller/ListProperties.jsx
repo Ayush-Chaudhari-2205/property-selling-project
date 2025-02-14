@@ -51,7 +51,7 @@ const ListProperties = () => {
       <div className="row">
         {properties.map((property) => (
           <div className="col-md-4 mb-4" key={property.id}>
-            <PropertyCard property={property} />
+            <PropertyCard actionButton={true} property={property} />
           </div>
         ))}
       </div>
