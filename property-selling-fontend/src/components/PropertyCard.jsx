@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "../assets/css/PropertyCard.css"; // Ensure you have styling for the card
 import AuthContext from "../context/AuthContext";
 
-const PropertyCard = ({ property }) => {
+const PropertyCard = ({ property,actionButton }) => {
 
 console.log(property);
 
@@ -49,7 +49,15 @@ console.log(property);
           >
             View Details
           </Link>
-          {user && user.role === "SELLER" && (
+          {actionButton && (            <>
+              <Link to={`/property/update/${property.id}`} className="btn btn-warning btn-sm">
+            Update
+          </Link>
+          <Link to={`/property/images/${property.id}`} className="btn btn-secondary btn-sm">
+              Images
+            </Link>
+            </>)}
+          {/* {user && user.role === "SELLER" && (
             <>
               <Link to={`/property/update/${property.id}`} className="btn btn-warning btn-sm">
             Update
@@ -60,7 +68,7 @@ console.log(property);
             </>
           
           
-        )}
+        )} */}
         </div>
       </div>
     </div>

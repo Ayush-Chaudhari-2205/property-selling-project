@@ -127,7 +127,7 @@ const PropertySearch = () => {
       <div className="row">
         {properties.length > 0 ? properties.map((property) => (
           <div className="col-md-4 mb-4" key={property.id}>
-            <PropertyCard property={property} />
+            <PropertyCard actionButton={false} property={property} />
           </div>
         )) : <p className="text-center">No properties found.</p>}
       </div>
